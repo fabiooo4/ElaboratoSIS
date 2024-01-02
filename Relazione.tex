@@ -1,5 +1,6 @@
 \documentclass[a4paper]{article}
 \usepackage[italian]{babel}
+\usepackage{float}
 
 \begin{document}
 \input{title.tex}
@@ -16,8 +17,57 @@ Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labor
 
 
 \section{Diagramma degli stati del controllore}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
-
+È riportato di seguito il diagramma degli stati del controllore rappresentato in tabella di mealy
+con gli ingressi codificati nel seguente modo:
+\begin{itemize}
+	\item \textbf{Nessuna scelta}: $N = 00$
+	\item \textbf{Sasso}: $S = 01$
+	\item \textbf{Carta}: $C = 10$
+	\item \textbf{Forbice}: $F = 11$
+\end{itemize}
+e gli stati codificati come:
+\begin{itemize}
+	\item \textbf{Par}: Pareggio
+	\item \textbf{PrS}: Primo giocatore vince con sasso
+	\item \textbf{PrC}: Primo giocatore vince con carta
+	\item \textbf{PrF}: Primo giocatore vince con forbice
+	\item \textbf{SeS}: Secondo giocatore vince con sasso
+	\item \textbf{SeC}: Secondo giocatore vince con carta
+	\item \textbf{SeF}: Secondo giocatore vince con forbice
+\end{itemize}
+Dato l'elevato numero di ingressi nella seguente tabella è stato deciso di mettere in riga gli stati e in
+colonna gli ingressi per una migliore leggibilità.
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{l|c|c|c|c|c|c|c}
+			   & Par    & PrS    & PrC    & PrF    & SeS    & SeC    & SeF    \\
+			\hline
+			N- & Par/00 & PrS/00 & PrC/00 & PrF/00 & SeS/00 & SeC/00 & SeF/00 \\
+			\hline
+			-N & Par/00 & PrS/00 & PrC/00 & PrF/00 & SeS/00 & SeC/00 & SeF/00 \\
+			\hline
+			SS & Par/11 & PrS/00 & Par/11 & Par/11 & SeS/00 & Par/11 & Par/11 \\
+			\hline
+			SC & SeC/10 & PrS/00 & SeC/10 & SeC/10 & SeC/10 & SeC/00 & SeC/10 \\
+			\hline
+			SF & PrS/01 & PrS/00 & PrS/01 & PrS/01 & PrS/01 & Prs/01 & SeF/00 \\
+			\hline
+			CS & PrC/01 & PrC/01 & PrC/00 & PrC/01 & SeS/00 & PrC/01 & PrC/01 \\
+			\hline
+			CC & Par/11 & Par/11 & PrC/00 & Par/11 & Par/11 & SeC/00 & Par/11 \\
+			\hline
+			CF & SeF/10 & SeF/10 & PrC/00 & SeF/10 & SeF/10 & SeF/10 & SeF/00 \\
+			\hline
+			FS & SeS/10 & SeS/10 & SeS/10 & PrF/00 & SeS/00 & SeS/10 & SeS/10 \\
+			\hline
+			FC & PrF/01 & PrF/01 & PrF/01 & PrF/00 & PrF/01 & SeC/00 & PrF/01 \\
+			\hline
+			FF & Par/11 & Par/11 & Par/11 & PrF/00 & Par/11 & Par/11 & SeF/00 \\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{Diagramma degli stati del controllore}
+\end{table}
 
 
 \section{Architettura del datapath}
