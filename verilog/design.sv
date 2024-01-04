@@ -25,6 +25,7 @@ module MorraCinese(
       mancheIdx = 5'b00000;
       vantaggio = 0;
       partita = 2'b00;
+      manche = 2'b00;
       maxManche = 5'b00100 + {primo, secondo};
     end else begin
       if (manche != 2'b00) begin
@@ -35,11 +36,16 @@ module MorraCinese(
       end else if (manche == 2'b10) begin
         vantaggio--;
       end
+
       if (vantaggio <= -2 && mancheIdx >= 4) begin
-        partita = 2'b01;
-      end else if (vantaggio >= 2 && mancheIdx >= 4) begin
         partita = 2'b10;
-      end else if (mancheIdx == maxManche) begin
+      end else if (vantaggio >= 2 && mancheIdx >= 4) begin
+        partita = 2'b01;
+      end else if (mancheIdx == maxManche && vantaggio > 0) begin
+        partita = 2'b01;
+      end else if (mancheIdx == maxManche && vantaggio < 0) begin
+        partita = 2'b10;
+      end else if (mancheIdx == maxManche && vantaggio == 0) begin
         partita = 2'b11;
       end else begin
         partita = 2'b00;
