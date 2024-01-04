@@ -1,8 +1,8 @@
 .model and
-.inputs a b
-.outputs o
+.inputs A B
+.outputs O
 
-.names a b 0
+.names A B O
 11 1
 
 .end

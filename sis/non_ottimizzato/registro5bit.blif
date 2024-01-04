@@ -1,4 +1,4 @@
-.model registro4bit
+.model registro5bit
 .inputs A4 A3 A2 A1 A0
 .outputs O4 O3 O2 O1 O0
 .subckt registro1bit A=A4 O=O4

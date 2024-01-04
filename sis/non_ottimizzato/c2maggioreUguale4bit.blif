@@ -1,4 +1,4 @@
-.model maggioreUguale4bit # in complemento a 2
+.model c2maggioreUguale4bit # in complemento a 2
 .inputs A3 A2 A1 A0 B3 B2 B1 B0
 .outputs AgteB
 .subckt xor A=A3 B=B3 X=X3
