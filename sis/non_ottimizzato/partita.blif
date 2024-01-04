@@ -18,7 +18,7 @@
 # mancheIdx (mi) >= maxManche (mm)
 .subckt maggioreUguale5bit A4=mi4 A3=mi3 A2=mi2 A1=mi1 A0=mi0 B4=mm4 B3=mm3 B2=mm2 B1=mm1 B0=mm0 AgteB=MU3
 # maxManche >= 4
-.subckt maggioreUguale5bit A4=mi4 A3=mi3 A2=mi2 A1=mi1 A0=mi0 B4=6CO4 B3=6CO3 B2=6CO2 B1=6CO1 B0=6CO0 AgteB=MU4
+.subckt maggioreUguale5bit A4=mi4 A3=mi3 A2=mi2 A1=mi1 A0=mi0 B4=4CO4 B3=4CO3 B2=4CO2 B1=4CO1 B0=4CO0 AgteB=MU4
 # vantaggio <= -2
 .subckt c2maggioreUguale4bit A3=3CO3 A2=3CO2 A1=3CO1 A0=3CO0 B3=v3 B2=v2 B1=v1 B0=v0 AgteB=MU5
 # vantaggio >= 2

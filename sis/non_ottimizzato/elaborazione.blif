@@ -25,7 +25,7 @@
 # sommatore che somma 1 a mancheIdx se la manche è valida
 .subckt sommatore5bit A4=1muxm4 A3=1muxm3 A2=1muxm2 A1=1muxm1 A0=1muxm0 B4=mi4 B3=mi3 B2=mi2 B1=mi1 B0=mi0 CIN=ZERO O4=2S4 O3=2S3 O2=2S2 O1=2S1 O0=2S0 COUT=2COUT
 # mux settato a 1 quando inizia vale 1, valore precedente di mancheIdx altrimenti
-.subckt mux2in5bit X0=inizia A4=2S4 A3=2S3 A2=2S2 A1=2S1 A0=2S0 B4=3CO4 B3=3CO3 B2=3CO2 B1=3CO1 B0=3CO0 O4=muxmi4 O3=muxmi3 O2=muxmi2 O1=muxmi1 O0=muxmi0
+.subckt mux2in5bit X0=inizia A4=2S4 A3=2S3 A2=2S2 A1=2S1 A0=2S0 B4=1CO4 B3=1CO3 B2=1CO2 B1=1CO1 B0=1CO0 O4=muxmi4 O3=muxmi3 O2=muxmi2 O1=muxmi1 O0=muxmi0
 # registro mancheIdx (mi)
 .subckt registro5bit A4=muxmi4 A3=muxmi3 A2=muxmi2 A1=muxmi1 A0=muxmi0 O4=mi4 O3=mi3 O2=mi2 O1=mi1 O0=mi0
 
@@ -39,7 +39,7 @@
 .subckt registro4bit A3=muxv3 A2=muxv2 A1=muxv1 A0=muxv0 O3=v3 O2=v2 O1=v1 O0=v0
 
 # componente che calcola il risultato della partita
-.subckt partita v3=v3 v2=v2 v1=v1 v0=v0 mi4=mi4 mi3=mi3 mi2=mi2 mi1=mi1 mi0=mi0 mm4=mm4 mm3=mm3 mm2=mm2 mm1=mm1 mm0=mm0 inizia=inizia partita1=partita1 partita0=partita0
+.subckt partita v3=muxv3 v2=muxv2 v1=muxv1 v0=muxv0 mi4=muxmi4 mi3=muxmi3 mi2=muxmi2 mi1=muxmi1 mi0=muxmi0 mm4=mm4 mm3=mm3 mm2=mm2 mm1=mm1 mm0=mm0 inizia=inizia partita1=partita1 partita0=partita0
 
 .model COSTANTE00000
 .outputs O4 O3 O2 O1 O0
