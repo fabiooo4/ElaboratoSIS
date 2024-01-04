@@ -249,6 +249,131 @@ module MorraCinese_tb();
     $fdisplay(sisTb, "simulate %b %b %b %b %b", primo[1], primo[0], secondo[1], secondo[0], inizia);
     $fdisplay(verilogOut, "Outputs: %b %b %b %b", manche[1], manche[0], partita[1], partita[0]);
     // Partita 3 finita con vincitore Primo e vantaggio 2
+    
+    // Partita 4
+    inizia = 1'b1;
+
+    // maxManche = 9
+    primo = 2'b01;
+    secondo = 2'b01;
+
+    #20
+    $display("\nPartita 4");
+    $display("Primo: %b Secondo: %b Manche: %b Partita: %b", primo, secondo, manche, partita);
+    $fdisplay(sisTb, "simulate %b %b %b %b %b", primo[1], primo[0], secondo[1], secondo[0], inizia);
+    $fdisplay(verilogOut, "Outputs: %b %b %b %b", manche[1], manche[0], partita[1], partita[0]);
+    // Manche 1
+    // Sasso vs Forbice
+    // Vantaggio 1
+    inizia = 1'b0;
+    primo = 2'b01;
+    secondo = 2'b11;
+
+    #20
+    $display("Primo: %b Secondo: %b Manche: %b Partita: %b", primo, secondo, manche, partita);
+    $fdisplay(sisTb, "simulate %b %b %b %b %b", primo[1], primo[0], secondo[1], secondo[0], inizia);
+    $fdisplay(verilogOut, "Outputs: %b %b %b %b", manche[1], manche[0], partita[1], partita[0]);
+    // Manche 2
+    // Carta vs Sasso
+    // Vantaggio 2
+    primo = 2'b10;
+    secondo = 2'b01;
+
+    #20
+    $display("Primo: %b Secondo: %b Manche: %b Partita: %b", primo, secondo, manche, partita);
+    $fdisplay(sisTb, "simulate %b %b %b %b %b", primo[1], primo[0], secondo[1], secondo[0], inizia);
+    $fdisplay(verilogOut, "Outputs: %b %b %b %b", manche[1], manche[0], partita[1], partita[0]);
+    // Manche 3
+    // Forbice vs Sasso
+    // Vantaggio 1
+    primo = 2'b11;
+    secondo = 2'b01;
+
+    #20
+    $display("Primo: %b Secondo: %b Manche: %b Partita: %b", primo, secondo, manche, partita);
+    $fdisplay(sisTb, "simulate %b %b %b %b %b", primo[1], primo[0], secondo[1], secondo[0], inizia);
+    $fdisplay(verilogOut, "Outputs: %b %b %b %b", manche[1], manche[0], partita[1], partita[0]);
+    // Manche 4
+    // Carta vs Carta
+    // Vantaggio 1
+    primo = 2'b10;
+    secondo = 2'b10;
+
+    #20
+    $display("Primo: %b Secondo: %b Manche: %b Partita: %b", primo, secondo, manche, partita);
+    $fdisplay(sisTb, "simulate %b %b %b %b %b", primo[1], primo[0], secondo[1], secondo[0], inizia);
+    $fdisplay(verilogOut, "Outputs: %b %b %b %b", manche[1], manche[0], partita[1], partita[0]);
+    // Manche 5
+    // Forbice vs Sasso
+    // Vantaggio 0
+    primo = 2'b11;
+    secondo = 2'b01;
+
+    #20
+    $display("Primo: %b Secondo: %b Manche: %b Partita: %b", primo, secondo, manche, partita);
+    $fdisplay(sisTb, "simulate %b %b %b %b %b", primo[1], primo[0], secondo[1], secondo[0], inizia);
+    $fdisplay(verilogOut, "Outputs: %b %b %b %b", manche[1], manche[0], partita[1], partita[0]);
+    // Manche 6
+    // Sasso vs Forbice
+    // Vantaggio 1
+    primo = 2'b01;
+    secondo = 2'b11;
+
+    #20
+    $display("Primo: %b Secondo: %b Manche: %b Partita: %b", primo, secondo, manche, partita);
+    $fdisplay(sisTb, "simulate %b %b %b %b %b", primo[1], primo[0], secondo[1], secondo[0], inizia);
+    $fdisplay(verilogOut, "Outputs: %b %b %b %b", manche[1], manche[0], partita[1], partita[0]);
+    // Manche non valida (7)
+    // Sasso vs Carta
+    // Vantaggio 1
+    primo = 2'b01;
+    secondo = 2'b10;
+
+    #20
+    $display("Primo: %b Secondo: %b Manche: %b Partita: %b", primo, secondo, manche, partita);
+    $fdisplay(sisTb, "simulate %b %b %b %b %b", primo[1], primo[0], secondo[1], secondo[0], inizia);
+    $fdisplay(verilogOut, "Outputs: %b %b %b %b", manche[1], manche[0], partita[1], partita[0]);
+    // Manche non valida (7)
+    // N/A vs Forbici
+    // Vantaggio 1
+    primo = 2'b00;
+    secondo = 2'b11;
+
+    #20
+    $display("Primo: %b Secondo: %b Manche: %b Partita: %b", primo, secondo, manche, partita);
+    $fdisplay(sisTb, "simulate %b %b %b %b %b", primo[1], primo[0], secondo[1], secondo[0], inizia);
+    $fdisplay(verilogOut, "Outputs: %b %b %b %b", manche[1], manche[0], partita[1], partita[0]);
+    // Manche non valida (7)
+    // Sasso vs Forbici
+    // Vantaggio 1
+    primo = 2'b01;
+    secondo = 2'b11;
+
+    #20
+    $display("Primo: %b Secondo: %b Manche: %b Partita: %b", primo, secondo, manche, partita);
+    $fdisplay(sisTb, "simulate %b %b %b %b %b", primo[1], primo[0], secondo[1], secondo[0], inizia);
+    $fdisplay(verilogOut, "Outputs: %b %b %b %b", manche[1], manche[0], partita[1], partita[0]);
+    // Manche 7
+    // Forbice vs Forbice
+    // Vantaggio 1
+    primo = 2'b11;
+    secondo = 2'b11;
+
+    #20
+    $display("Primo: %b Secondo: %b Manche: %b Partita: %b", primo, secondo, manche, partita);
+    $fdisplay(sisTb, "simulate %b %b %b %b %b", primo[1], primo[0], secondo[1], secondo[0], inizia);
+    $fdisplay(verilogOut, "Outputs: %b %b %b %b", manche[1], manche[0], partita[1], partita[0]);
+    // Manche 8
+    // Carta vs Sasso
+    // Vantaggio 2
+    primo = 2'b10;
+    secondo = 2'b01;
+
+    #20
+    $display("Primo: %b Secondo: %b Manche: %b Partita: %b", primo, secondo, manche, partita);
+    $fdisplay(sisTb, "simulate %b %b %b %b %b", primo[1], primo[0], secondo[1], secondo[0], inizia);
+    $fdisplay(verilogOut, "Outputs: %b %b %b %b", manche[1], manche[0], partita[1], partita[0]);
+    // Partita 4 finita con vincitore Primo e Vantaggio 2
 
     $fdisplay(sisTb, "quit");
     $fclose(sisTb);
