@@ -1,6 +1,12 @@
 \documentclass[a4paper]{article}
 \usepackage[italian]{babel}
 \usepackage{float}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=false,
+}
 
 \begin{document}
 \input{title.tex}
@@ -13,7 +19,35 @@ Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labor
 
 
 \section{Architettura generale}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			\draw (0,0) rectangle (2,2) node[pos=.5] {FSM};
+			\draw[latex-] (0.25,2) -- ++(0,1) node[above, align=center, scale=0.8] {primo};
+			\draw[latex-] (1,2) -- ++(0,1.5) node[above, align=center, scale=0.8] {secondo};
+			\draw[latex-] (1.75,2) -- ++(0,1) node[above, align=center, scale=0.8] {inizia};
+
+			\draw[-latex] (1,0) -- ++(0,-1) node[below, align=center, scale=0.8] {manche};
+
+
+			\draw (4,0) rectangle (6,2) node[pos=.5] {Datapath};
+			\draw[latex-] (4.25,2) -- ++(0,1) node[above, align=center, scale=0.8, yshift=-2] {primo};
+			\draw[latex-] (5,2) -- ++(0,1.5) node[above, align=center, scale=0.8] {secondo};
+			\draw[latex-] (5.75,2) -- ++(0,1) node[above, align=center, scale=0.8] {inizia};
+
+			\draw[-latex] (5,0) -- ++(0,-1) node[below, align=center, scale=0.8] {partita};
+
+			\draw[latex-] (4,1) -- (2,1) node[pos=.5, above, align=center, scale=0.8] {manche};
+
+			\draw[latex-] (0,0.5) -- ++(-0.5,0) -- ++(0,-1) -- ++(-1,0) node[left, align=center, scale=0.8] {CLK};
+			\draw[fill] (-0.5,-0.5) circle (0.05);
+			\draw[-latex] (-0.5,-0.5) -- (4.5, -0.5) -- ++(0,0.5);
+
+		\end{tikzpicture}
+	\end{center}
+	\caption{Architettura generale della FSMD}
+\end{figure}
+
 
 
 \section{Diagramma degli stati del controllore}
