@@ -9,12 +9,58 @@
 \pagebreak
 
 \section{Specifiche}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
-
-
+Si progetti un dispositivo per la gestione di partite di \textbf{Morra Cinese}, conosciuta anche come "sasso-carta-forbici".
+Il dispositivo dovrà essere modellato come un circuito sequenziale FSMD (Finite State Machine + Datapath) in Sis e Verilog.
+Si considerino due giocatori che inseriscono una mossa che può essere sasso, carta o forbici. Ad ogni manche, il giocatore vincente è decretato dalle seguenti regole:
+\begin{itemize}
+	\item Sasso batte Forbici
+	\item Forbici batte Carta
+	\item Carta batte Sasso
+\end{itemize}
+Nell'eventualità che i due giocatori scelgano la stessa mossa verrà decretato un pareggio.
+In aggiunta, ogni partita di \textbf{Morra Cinese} si articola su più manche, con le seguenti regole:
+\begin{enumerate}
+	\item Si devono giocare un \textbf{minimo} di \textbf{quattro manche};
+	\item Si possono giocare un \textbf{massimio} di \textbf{diciannove manche}. Il numero delle stesse viene settato al ciclo di clock in cui viene iniziata la partita;
+	\item Vince il primo giocatore che riesce a \textbf{vincere due manche in più del proprio avversario} (avendo giocato le quattro manche \textbf{minime});
+	\item Ad ogni manche, il giocatore \textbf{vincente della manche precedente} è tenuto a non ripetere l'ultima mossa utilizzata. Nel caso lo facesse (indipendentemente dal risultato della manche attuale) la manche non sarebbe valida (non sarebbe conteggiata nel \textbf{mancheIdx}) e andrebbe quindi ripetuta;
+	\item Ad ogni manche, in caso di pareggio essa \textbf{viene conteggiata}. Alla manche successiva entrambi i giocatori possono usare \textbf{tutte le mosse};
+\end{enumerate}
+Il circuito ha \textbf{tre ingressi}:
+\begin{itemize}
+	\item \textbf{PRIMO [2 bit]}: mossa selezionata dal primo giocatore. Le mosse hanno i seguenti codici:
+	      \begin{itemize}
+		      \item \textbf{00}: Nessuna mossa utilizzata;
+		      \item \textbf{01}: Sasso;
+		      \item \textbf{10}: Carta;
+		      \item \textbf{11}: Forbici;
+	      \end{itemize}
+	\item \textbf{SECONDO [2 bit]}: mossa selezionata dal secondo giocatore. Le mosse hanno codici identici a quelli del primo giocatore.
+	\item \textbf{INIZIA [1 bit]}: quando il valore è uguale ad 1, riporta il sistema alla configurazione iniziale. Inoltre, la concatenazione degli ingressi \textbf{PRIMO} e \textbf{SECONDO} viene utilizzata per stabilire il numero massimo di manche (le \textbf{quattro manche} obbligatorie sommate al \textbf{valore concatenato di PRIMO e SECONDO}).
+	      Per fare un esempio inserendo i valori \textbf{PRIMO = 01} e \textbf{SECONDO = 10} si dovrà sommare il numero \textbf{quattro} (in base due) al numero \textbf{0110} ottenendo un massimo di \textbf{dieci manche} per tale partita.
+\end{itemize}
+Il circuito ha \textbf{due uscite}:
+\begin{itemize}
+	\item \textbf{MANCHE [2 bit]}: fornisce in output il risultato dell'ultima manche giocata con la seguente codifica:
+	      \begin{itemize}
+		      \item \textbf{00}: manche non valida;
+		      \item \textbf{01}: manche vinta dal giocatore 1;
+		      \item \textbf{10}: manche vinta dal giocatore 2;
+		      \item \textbf{11}: manche pareggiata;
+	      \end{itemize}
+	\item \textbf{PARTITA [2 bit]}: fornisce in output il risultato della partita con la seguente codifica:
+	      \begin{itemize}
+		      \item \textbf{00}: la partita non è ancora terminata;
+		      \item \textbf{01}: la partita è terminata, vittoria del \textbf{giocatore 1};
+		      \item \textbf{10}: la partita è terminata, vittoria del giocatore 2;
+		      \item \textbf{11}: la partita è terminata in pareggio;
+	      \end{itemize}
+\end{itemize}
 \section{Architettura generale}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
+Il circuito è costituito da FSM (Controllore) e Data-path (elaboratore). I due file che racchiudono la rappresentazione di tali componenti sono presenti nella cartella SIS.
+Sono presenti entrambi in modo che il circuito sia completo e possa funzionare.
 
+Di seguito verranno riportati i componenti utilizzati.
 
 \section{Diagramma degli stati del controllore}
 È riportato di seguito il diagramma degli stati del controllore rappresentato in tabella di mealy
@@ -71,8 +117,10 @@ colonna gli ingressi per una migliore leggibilità.
 
 
 \section{Architettura del datapath}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
-
+Le componenti che sono state utilizzate per la realizzazione del Data-path sono:
+\begin{itemize}
+	\item
+\end{itemize}
 
 
 \section{Simulazioni}
