@@ -120,7 +120,8 @@ e gli stati codificati come:
 Dato l'elevato numero di ingressi nella seguente tabella è stato deciso di mettere in riga gli stati e in
 colonna gli ingressi per una migliore leggibilità.
 \begin{table}[H]
-	\begin{center}
+	\centering
+	{\renewcommand{\arraystretch}{2}%
 		\begin{tabular}{l|c|c|c|c|c|c|c}
 			   & Par    & PrS    & PrC    & PrF    & SeS    & SeC    & SeF    \\
 			\hline
@@ -146,8 +147,7 @@ colonna gli ingressi per una migliore leggibilità.
 			\hline
 			FF & Par/11 & Par/11 & Par/11 & PrF/00 & Par/11 & Par/11 & SeF/00 \\
 			\hline
-		\end{tabular}
-	\end{center}
+		\end{tabular}}
 	\caption{Diagramma degli stati del controllore}
 \end{table}
 
@@ -373,9 +373,174 @@ Le componenti che sono state utilizzate per la realizzazione del Data-path sono:
 		% partita
 		\draw (0.2, -9.15) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 2};
 		% ------------------
+	\end{circuitikz}
+	\caption{Architettura del datapath}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[square/.style={regular polygon,regular polygon sides=4}]
+		\draw (0,0) node[rectangle ,draw, minimum width=2.5cm, minimum height=1cm, scale=1.6] (partita) {Partita};
+		\node[xshift=-40, yshift=-3] at (partita.north) (partita-i0) {};
+		\node[xshift=-15, yshift=-3] at (partita.north) (partita-i1) {};
+		\node[xshift=15, yshift=-3] at (partita.north) (partita-i2) {};
+		\node[xshift=40, yshift=-3] at (partita.north) (partita-i3) {};
+
+		\draw[latex-] (partita-i0) -- ++(0,2) node[above] {vantaggio};
+		\draw[latex-] (partita-i1) -- ++(0,1.5) node[above, xshift=3] {mancheIdx};
+		\draw[latex-] (partita-i2) -- ++(0,1) node[above] {maxManche};
+		\draw[latex-] (partita-i3) -- ++(0,0.5) node[above] {inizia};
+		\draw[-latex] (partita.south) -- ++(0,-1) node[below] {partita};
 
 	\end{circuitikz}
 \end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[square/.style={regular polygon,regular polygon sides=4}]
+		% Multiplexer 2 to 1
+		\draw (3,-8) node (1mux2-0) {0};
+		\draw (2.5,-8) node (1mux2-1) {1};
+		\draw (3,-7.8) node (1mux2-i0) {};
+		\draw (2.5,-7.8) node (1mux2-i1) {};
+		\draw (3.3,-8) node (1mux2-s) {};
+		\draw (2.75,-8.18) node (1mux2-o) {};
+		\draw (2,-7.7) -- ++(1.5,0) -- ++(-0.25, -0.6) -- ++(-1,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Multiplexer2 2 to 1
+		\draw (2.75,-9.5) node (2mux2-1) {0};
+		\draw (3.25,-9.5) node (2mux2-0) {1};
+		\draw (2.75,-9.3) node (2mux2-i0) {};
+		\draw (3.25,-9.3) node (2mux2-i1) {};
+		\draw (3.55,-9.5) node (2mux2-s) {};
+		\draw (3,-9.68) node (2mux2-o) {};
+		\draw (2.25,-9.2) -- ++(1.5,0) -- ++(-0.25, -0.6) -- ++(-1,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Operatori
+		\draw (-0.7,-2.5) node[square,draw, minimum size=2cm, scale=0.6] (gt1) {\huge$\ge$};
+		\node[xshift=-5, yshift=-3] at (gt1.north) (gt1-i0) {};
+		\node[xshift=5, yshift=-3] at (gt1.north) (gt1-i1) {};
+
+		\draw (0.7,-2.5) node[square,draw, minimum size=2cm, scale=0.6] (gt2) {\huge$\ge$};
+		\node[xshift=-5, yshift=-3] at (gt2.north) (gt2-i0) {};
+		\node[xshift=5, yshift=-3] at (gt2.north) (gt2-i1) {};
+
+		\draw (2.1,-2.5) node[square,draw, minimum size=2cm, scale=0.6] (gt3) {\huge$\ge$};
+		\node[xshift=-5, yshift=-3] at (gt3.north) (gt3-i0) {};
+		\node[xshift=5, yshift=-3] at (gt3.north) (gt3-i1) {};
+
+		\draw (3.5,-2.5) node[square,draw, minimum size=2cm, scale=0.6] (gt4) {\huge$\ge$};
+		\node[xshift=-5, yshift=-3] at (gt4.north) (gt4-i0) {};
+		\node[xshift=5, yshift=-3] at (gt4.north) (gt4-i1) {};
+
+		\draw (4.9,-2.5) node[square,draw, minimum size=2cm, scale=0.6] (gt5) {\huge$\ge$};
+		\node[xshift=-5, yshift=-3] at (gt5.north) (gt5-i0) {};
+		\node[xshift=5, yshift=-3] at (gt5.north) (gt5-i1) {};
+
+		\draw (6.3,-2.5) node[square,draw, minimum size=2cm, scale=0.6] (gt6) {\huge$\ge$};
+		\node[xshift=-5, yshift=-3] at (gt6.north) (gt6-i0) {};
+		\node[xshift=5, yshift=-3] at (gt6.north) (gt6-i1) {};
+
+		\draw (0,-4.5) node[square,draw, minimum size=2cm, scale=0.6] (conc1) {\huge$C$};
+		\node[xshift=-5, yshift=-3] at (conc1.north) (conc1-i0) {};
+		\node[xshift=5, yshift=-3] at (conc1.north) (conc1-i1) {};
+
+		\draw (3,-6) node[square,draw, minimum size=2cm, scale=0.6] (conc2) {\huge$C$};
+		\node[xshift=-5, yshift=-3] at (conc2.north) (conc2-i0) {};
+		\node[xshift=5, yshift=-3] at (conc2.north) (conc2-i1) {};
+		% ------------------
+
+		% vantaggio
+		\draw (0,0) node[above] (inizia) {\scriptsize vantaggio} -- ++(0,-1.5);
+		\draw[-latex] (0,-1.5) -- ++(-0.5,0) -| (gt1-i1);
+		\draw[latex-] (gt1-i0) -- ++(0,0.5) node[above] {\tiny 0000};
+
+		\draw[-latex] (0,-1.5) -- ++(0.5,0) -| (gt2-i0);
+		\draw[latex-] (gt2-i1) -- ++(0,0.5) node[above] {\tiny 0000};
+		\draw[fill] (0,-1.5) circle (0.03);
+
+		\draw[-latex] (gt1.south) -- ++(0,-0.5) -| (conc1-i0);
+		\draw[-latex] (gt2.south) -- ++(0,-0.5) -| (conc1-i1);
+
+		\draw[latex-] (gt3-i0) -- ++(0,0.5) node[above] {\tiny $\stackrel{-2}{1110}$};
+		\draw[latex-] (gt4-i1) -- ++(0,0.5) node[above] {\tiny $\stackrel{2}{0010}$};
+		\draw[latex-] (gt3-i1) -- ++(0,0.5) -- ++(0.5,0);
+		\draw[latex-] (gt4-i0) -- ++(0,0.5) -- ++(-0.5,0);
+		\draw[fill] (2.8,-1.68) circle (0.03);
+		\draw (2.8,-1.68) |- (0,-0.5);
+		\draw[fill] (0,-0.5) circle (0.03);
+
+		\node[and port, scale=0.6, rotate=-90, anchor=in 2] at (gt3.south |- 52,-4) (and1) {};
+		\node[and port, scale=0.6, rotate=-90, anchor=in 2] at (gt4.south |- 52,-4) (and2) {};
+
+		\draw (gt3.south) -- (and1.in 2);
+		\draw (gt4.south) -- (and2.in 2);
+
+		\draw[-latex] (and1.out) -- ++(0,-0.3) -| (conc2-i0);
+		\draw[-latex] (and2.out) -- ++(0,-0.3) -| (conc2-i1);
+
+		% mancheIdx and maxManche
+		\draw[latex-] (gt5-i1) -- ++(0,0.5) node[above, xshift=2] {\tiny $\stackrel{3}{00011}$};
+		\draw[latex-] (gt5-i0) -- (gt5-i0 |- 52, 0) node[above] {\scriptsize mancheIdx};
+
+		\draw[latex-] (gt6-i1) -- (gt6-i1 |- 52, 0) node[above] {\scriptsize maxManche};
+		\draw[latex-] (gt6-i0) -- ++(0,0.5) |- (gt5-i0 |- 52, -1);
+		\draw[fill] (gt5-i0 |- 52, -1) circle (0.03);
+
+		\draw (gt5.south) -- ++(0,-0.5) -- ++(-2,0) -| (and1.in 1);
+		\draw (and2.in 1) -- ++(0,0.57);
+		\draw[fill] (3.838,-3.43) circle (0.03);
+
+		\draw[-latex] (conc2.south) -| (1mux2-i0);
+		\draw[-latex] (conc1.south) -- ++(0,-2) -| (1mux2-i1);
+
+		\draw[-latex] (1mux2-o) -- (2mux2-i0);
+		\draw[latex-] (2mux2-i1) -- ++(0,0.5) node[above] {\tiny 00};
+
+		\draw[-latex] (gt6.south) |- (1mux2-s);
+
+		% inizia
+		\draw[-latex] (7.8,0) node[above] (inizia) {\scriptsize inizia} |- (2mux2-s);
+
+		\draw[-latex] (2mux2-o) -- ++(0,-1) node[below] {\scriptsize partita};
+
+		% Numero di bit
+		% vantaggio 
+		\draw (-0.1, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 4};
+		% mancheIdx
+		\draw (4.63, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+		% maxManche
+		\draw (6.38, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+		% inizia
+		\draw (7.7, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+
+		% gt
+		\draw (-0.8, -3.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+		\draw (0.6, -3.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+		\draw (2, -3.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+		\draw (3.4, -3.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+		\draw (4.8, -3.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+		\draw (6.2, -3.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+
+		% and
+		\draw (2.18, -5.1) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+		\draw (3.58, -5.1) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+
+		% conc
+		\draw (-0.1, -5.25) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 2};
+		\draw (2.9, -6.75) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 2};
+
+		% mux
+		\draw (2.65, -8.7) -- ++(0.2, 0.2) node[left, yshift=-2, xshift=-5] {\tiny 2};
+		\draw (2.9, -10.2) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 2};
+
+		% ------------------
+	\end{circuitikz}
+	\caption{Architettura del componente Partita}
+\end{figure}
+
 
 
 \section{Simulazioni}
