@@ -2,7 +2,9 @@
 \usepackage[italian]{babel}
 \usepackage{float}
 \usepackage{tikz}
+\usetikzlibrary{shapes}
 \usepackage{circuitikz}
+
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=false,
@@ -63,7 +65,6 @@ Il circuito ha \textbf{due uscite}:
 	      \end{itemize}
 \end{itemize}
 \section{Architettura generale}
-<<<<<<< HEAD
 \begin{figure}[H]
 	\begin{center}
 		\begin{tikzpicture}
@@ -92,10 +93,8 @@ Il circuito ha \textbf{due uscite}:
 	\end{center}
 	\caption{Architettura generale della FSMD}
 \end{figure}
-=======
 Il circuito è costituito da FSM (Controllore) e Data-path (elaboratore). I due file che racchiudono la rappresentazione di tali componenti sono presenti nella cartella SIS.
 Sono presenti entrambi in modo che il circuito sia completo e possa funzionare.
->>>>>>> 6010bb3ef24cf2363d927e15f73ce15961771bb9
 
 Di seguito verranno riportati i componenti utilizzati.
 
@@ -155,9 +154,228 @@ colonna gli ingressi per una migliore leggibilità.
 
 \section{Architettura del datapath}
 Le componenti che sono state utilizzate per la realizzazione del Data-path sono:
-\begin{itemize}
-	\item
-\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[square/.style={regular polygon,regular polygon sides=4}]
+		% Multiplexer 2 to 1
+		\draw (-1.4,-1) node (1mux2-0) {0};
+		\draw (-0.9,-1) node (1mux2-1) {1};
+		\draw (-1.4,-0.8) node (1mux2-i0) {};
+		\draw (-0.9,-0.8) node (1mux2-i1) {};
+		\draw (-0.6,-1) node (1mux2-s) {};
+		\draw (-1.15,-1.18) node (1mux2-o) {};
+		\draw (-1.9,-0.7) -- ++(1.5,0) -- ++(-0.25, -0.6) -- ++(-1,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Multiplexer2 2 to 1
+		\draw (-1.4,-5) node (2mux2-0) {0};
+		\draw (-0.9,-5) node (2mux2-1) {1};
+		\draw (-1.4,-4.8) node (2mux2-i0) {};
+		\draw (-0.9,-4.8) node (2mux2-i1) {};
+		\draw (-0.6,-5) node (2mux2-s) {};
+		\draw (-1.15,-5.18) node (2mux2-o) {};
+		\draw (-1.9,-4.7) -- ++(1.5,0) -- ++(-0.25, -0.6) -- ++(-1,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Multiplexer3 2 to 1
+		\draw (1.9,-5) node (3mux2-0) {0};
+		\draw (1.4,-5) node (3mux2-1) {1};
+		\draw (1.9,-4.8) node (3mux2-i0) {};
+		\draw (1.4,-4.8) node (3mux2-i1) {};
+		\draw (1.1,-5) node (3mux2-s) {};
+		\draw (1.65,-5.18) node (3mux2-o) {};
+		\draw (0.9,-4.7) -- ++(1.5,0) -- ++(-0.25, -0.6) -- ++(-1,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Multiplexer 4 to 1
+		\draw (-5.9,-1) node (1mux4-0) {00};
+		\draw (-5.2,-1) node (1mux4-1) {01};
+		\draw (-4.5,-1) node (1mux4-2) {10};
+		\draw (-3.8,-1) node (1mux4-3) {11};
+		\draw (-5.9,-0.8) node (1mux4-i0) {};
+		\draw (-5.2,-0.8) node (1mux4-i1) {};
+		\draw (-4.5,-0.8) node (1mux4-i2) {};
+		\draw (-3.8,-0.8) node (1mux4-i3) {};
+		\draw (-6.3,-1) node (1mux4-s) {};
+		\draw (-4.95,-1.18) node (1mux4-o) {};
+		\draw (-6.5,-0.7) -- ++(3.3,0) -- ++(-0.25, -0.6) -- ++(-2.8,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Multiplexer2 4 to 1
+		\draw (-5.9,-5) node (2mux4-0) {00};
+		\draw (-5.2,-5) node (2mux4-1) {01};
+		\draw (-4.5,-5) node (2mux4-2) {10};
+		\draw (-3.8,-5) node (2mux4-3) {11};
+		\draw (-5.9,-4.8) node (2mux4-i0) {};
+		\draw (-5.2,-4.8) node (2mux4-i1) {};
+		\draw (-4.5,-4.8) node (2mux4-i2) {};
+		\draw (-3.8,-4.8) node (2mux4-i3) {};
+		\draw (-6.3,-5) node (2mux4-s) {};
+		\draw (-4.95,-5.18) node (2mux4-o) {};
+		\draw (-6.5,-4.7) -- ++(3.3,0) -- ++(-0.25, -0.6) -- ++(-2.8,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Registri
+		% mancheIdx
+		\draw (-1.15,-2.5) node[rectangle ,draw, minimum width=2.3cm, minimum height=0.7cm, scale=0.7] (mancheIdx) {\hspace{0.5em}mancheIdx};
+		\draw (mancheIdx.west) -- ++(0.005,0) -- ++(0,0.15) -- ++(0.2, -0.15) -- ++(-0.2,-0.15);
+		\draw[latex-] (mancheIdx.west) -- ++(-0.5,0) node[above] {\tiny CLK};
+
+		% vantaggio
+		\draw (-1.15,-6.5) node[rectangle ,draw, minimum width=2.3cm, minimum height=0.7cm, scale=0.7] (vantaggio) {\hspace{0.5em}vantaggio};
+		\draw (vantaggio.west) -- ++(0.005,0) -- ++(0,0.15) -- ++(0.2, -0.15) -- ++(-0.2,-0.15);
+		\draw[latex-] (vantaggio.west) -- ++(-0.5,0) node[above] {\tiny CLK};
+
+		% maxManche
+		\draw (1.65,-6.5) node[rectangle ,draw, minimum width=2.5cm, minimum height=0.7cm, scale=0.7] (maxManche) {\hspace{-0.5em}maxManche};
+		\draw (maxManche.east) -- ++(-0.005,0) -- ++(0,0.15) -- ++(-0.2, -0.15) -- ++(0.2,-0.15);
+		\draw[latex-] (maxManche.east) -- ++(0.5,0) node[above] {\tiny CLK};
+		% ------------------
+
+		% Operatori
+		\draw (-2.9,-3.4) node[square,draw, minimum size=2cm, scale=0.6] (sum1) {\huge$+$};
+		\node[xshift=-5, yshift=-3] at (sum1.north) (sum1-i0) {};
+		\node[xshift=5, yshift=-3] at (sum1.north) (sum1-i1) {};
+
+		\draw (-2.9,-7.4) node[square,draw, minimum size=2cm, scale=0.6] (sum2) {\huge$+$};
+		\node[xshift=-5, yshift=-3] at (sum2.north) (sum2-i0) {};
+		\node[xshift=5, yshift=-3] at (sum2.north) (sum2-i1) {};
+
+		\draw (3.5,-7.4) node[square,draw, minimum size=2cm, scale=0.6] (sum3) {\huge$+$};
+		\node[xshift=-5, yshift=-3] at (sum3.north) (sum3-i0) {};
+		\node[xshift=5, yshift=-3] at (sum3.north) (sum3-i1) {};
+
+		\draw (3mux2-i1 |- 52,-3.5) node[square,draw, minimum size=2cm, scale=0.6] (sum4) {\huge$+$};
+		\node[xshift=-5, yshift=-3] at (sum4.north) (sum4-i0) {};
+		\node[xshift=5, yshift=-3] at (sum4.north) (sum4-i1) {};
+
+		\draw (sum4-i1 |- 52,-1.5) node[square,draw, minimum size=2cm, scale=0.6] (conc) {\huge$C$};
+		\node[xshift=-5, yshift=-3] at (conc.north) (conc-i0) {};
+		\node[xshift=5, yshift=-3] at (conc.north) (conc-i1) {};
+		% ------------------
+
+		% Componenti
+		\draw (0.3,-8.5) node[rectangle ,draw, minimum width=2.5cm, minimum height=1cm, scale=0.7] (partita) {Partita};
+		\node[xshift=-15, yshift=-3] at (partita.north) (partita-i0) {};
+		\node[xshift=-5, yshift=-3] at (partita.north) (partita-i1) {};
+		\node[xshift=5, yshift=-3] at (partita.north) (partita-i2) {};
+		\node[xshift=15, yshift=-3] at (partita.north) (partita-i3) {};
+		% ------------------
+
+		% inizia
+		\draw[-latex] (0.3,0) node[above] (inizia) {\scriptsize inizia} -- ++(0,-1) -- (1mux2-s);
+		\draw[fill] (0.3,-1) circle (0.03);
+		\draw[-latex] (0.3,-1) -- ++(0,-1) |- (2mux2-s);
+		\draw[fill] (0.3,52 |- 2mux2-s) circle (0.03);
+		\draw[-latex] (0.3,52 |- 3mux2-s) -- (3mux2-s);
+
+		% primo
+		\draw[-latex] (1.2,0) node[above, yshift=-1.5] (inizia) {\scriptsize primo} -- ++(0,-0.8) -| (conc-i0);
+
+		% secondo
+		\draw[-latex] (1.93,0) node[above, xshift=8] (inizia) {\scriptsize secondo} -- ++(0,-0.8) -| (conc-i1);
+
+		% manche
+		\draw[latex-] (1mux4-s) -- ++(-1,0) node[below, yshift=-1, xshift=-5] (manche) {\scriptsize manche};
+		\draw[latex-] (2mux4-s) -- ++(-0.5,0) -- (-6.8, 52 |- 1mux4-s);
+		\draw[fill] (-6.8, 52 |- 1mux4-s) circle (0.03);
+
+		% mancheIdx
+		\draw[latex-] (1mux2-i1) -- ++(0,0.5) node[above] {\tiny 00000};
+		\draw[-latex] (1mux2-o) -- (mancheIdx.north);
+		\draw[-latex] (mancheIdx.south) -- ++(0,-0.5) |- (sum1.east);
+		\draw[-latex] (sum1.north) -- ++(0,2.7) -| (1mux2-i0);
+		\draw[-latex] (1mux4-o) |- (sum1.west);
+
+		\draw[latex-] (1mux4-i0) -- ++(0,0.5) node[above] {\tiny 00000};
+		\draw[latex-] (1mux4-i1) -- ++(0,0.5) node[above] {\tiny 00001};
+		\draw[latex-] (1mux4-i2) -- ++(0,0.5) node[above] {\tiny 00001};
+		\draw[latex-] (1mux4-i3) -- ++(0,0.5) node[above] {\tiny 00001};
+
+		% vantaggio
+		\draw[latex-] (2mux2-i1) -- ++(0,0.5) node[above] {\tiny 0000};
+		\draw[-latex] (2mux2-o) -- (vantaggio.north);
+		\draw[-latex] (vantaggio.south) -- ++(0,-0.5) |- (sum2.east);
+		\draw[-latex] (sum2.north) -- ++(0,2.7) -| (2mux2-i0);
+		\draw[-latex] (2mux4-o) |- (sum2.west);
+
+		\draw[latex-] (2mux4-i0) -- ++(0,0.5) node[above] {\tiny 0000};
+		\draw[latex-] (2mux4-i1) -- ++(0,0.5) node[above] {\tiny 0001};
+		\draw[latex-] (2mux4-i2) -- ++(0,0.5) node[above] {\tiny 1111};
+		\draw[latex-] (2mux4-i3) -- ++(0,0.5) node[above] {\tiny 0000};
+
+		% maxManche
+		\draw[-latex] (3mux2-o) -- (maxManche.north);
+		\draw[-latex] (maxManche.south) -- ++(0,-0.5) |- (sum3.west);
+		\draw[-latex] (sum3.north) -- ++(0,2.7) -| (3mux2-i0);
+
+		\draw[-latex] (sum4.south) -- (3mux2-i1);
+		\draw[latex-] (sum4-i0) -- ++(0,0.5) node[above, xshift=-2] {\tiny 00100};
+		\draw[-latex] (conc.south) -- (sum4-i1);
+
+		% partita
+		\draw[latex-] (partita-i0) -- ++(0,2.5) -- ++(-0.93,0);
+		\draw[fill] (-1.15, -5.75) circle (0.03);
+		\draw[latex-] (partita-i1) -- ++(0,6.5) -- ++(-1.28,0);
+		\draw[fill] (-1.15, -1.75) circle (0.03);
+		\draw[latex-] (partita-i2) -- ++(0,2.5) -- ++(1.18,0);
+		\draw[fill] (1.65, -5.75) circle (0.03);
+		\draw[-latex] (0.3,52 |- 3mux2-s) -- ++(0,-2) -| (partita-i3);
+		\draw[-latex] (partita.south) -- ++(0,-0.6) node[below] {\scriptsize partita};
+
+		% Numero di bit
+		% inizia
+		\draw (0.2, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+
+		% primo
+		\draw (1.1, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 2};
+
+		% secondo
+		\draw (1.83, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 2};
+
+		% concatenatore
+		\draw (1.48, -2.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+
+		% manche
+		\draw (-7.2, -1.1) -- ++(0.2, 0.2) node[above, yshift=-1, xshift=-2] {\tiny 2};
+
+		% mancheIdx
+		% 1mux2
+		\draw (-1.25, -1.6) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+		% reg
+		\draw (-1.25, -3.1) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+		% sum
+		\draw (-3, -2.8) -- ++(0.2, 0.2) node[left, yshift=-2, xshift=-3] {\tiny 5};
+		% 1mux4
+		\draw (-5.05, -1.6) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+
+		% maxManche
+		% sum
+		\draw (1.3, -4.3) -- ++(0.2, 0.2) node[left, yshift=-2, xshift=-3] {\tiny 5};
+		% 3mux2
+		\draw (1.55, -5.6) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+		% reg
+		\draw (1.55, -7.1) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+		% sum
+		\draw (3.4, -6.8) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+
+		% vantaggio
+		% 2mux2
+		\draw (-1.25, -5.6) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 4};
+		% reg
+		\draw (-1.25, -7.1) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 4};
+		% sum
+		\draw (-3, -6.8) -- ++(0.2, 0.2) node[left, yshift=-2, xshift=-3] {\tiny 4};
+		% 2mux4
+		\draw (-5.05, -5.6) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 4};
+
+		% partita
+		\draw (0.2, -9.15) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 2};
+		% ------------------
+
+	\end{circuitikz}
+\end{figure}
 
 
 \section{Simulazioni}
