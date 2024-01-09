@@ -8,8 +8,6 @@
 .subckt COSTANTE1110 O3=3CO3 O2=3CO2 O1=3CO1 O0=3CO0 # -2
 .subckt COSTANTE00100 O4=4CO4 O3=4CO3 O2=4CO2 O1=4CO1 O0=4CO0
 .subckt COSTANTE00 O1=5CO1 O0=5CO0
-.subckt COSTANTE00101 O4=6CO4 O3=6CO3 O2=6CO2 O1=6CO1 O0=6CO0
-
 
 # vantaggio <= 0
 .subckt c2maggioreUguale4bit A3=1CO3 A2=1CO2 A1=1CO1 A0=1CO0 B3=v3 B2=v2 B1=v1 B0=v0 AgteB=MU1
@@ -17,7 +15,7 @@
 .subckt c2maggioreUguale4bit A3=v3 A2=v2 A1=v1 A0=v0 B3=1CO3 B2=1CO2 B1=1CO1 B0=1CO0 AgteB=MU2
 # mancheIdx (mi) >= maxManche (mm)
 .subckt maggioreUguale5bit A4=mi4 A3=mi3 A2=mi2 A1=mi1 A0=mi0 B4=mm4 B3=mm3 B2=mm2 B1=mm1 B0=mm0 AgteB=MU3
-# maxManche >= 4
+# mancheIdx >= 4
 .subckt maggioreUguale5bit A4=mi4 A3=mi3 A2=mi2 A1=mi1 A0=mi0 B4=4CO4 B3=4CO3 B2=4CO2 B1=4CO1 B0=4CO0 AgteB=MU4
 # vantaggio <= -2
 .subckt c2maggioreUguale4bit A3=3CO3 A2=3CO2 A1=3CO1 A0=3CO0 B3=v3 B2=v2 B1=v1 B0=v0 AgteB=MU5
@@ -71,28 +69,6 @@
 1
 .names O1
 .names O0
-.end
-
-.model COSTANTE00101
-.outputs O4 O3 O2 O1 O0
-.names O4
-.names O3
-.names O2
-1
-.names O1
-.names O0
-1
-.end
-
-.model COSTANTE00011
-.outputs O4 O3 O2 O1 O0
-.names O4
-.names O3
-.names O2
-.names O1
-1
-.names O0
-1
 .end
 
 .model COSTANTE00
