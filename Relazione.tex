@@ -1,6 +1,7 @@
 \documentclass[a4paper]{article}
 \usepackage[italian]{babel}
 \usepackage{float}
+\usepackage{amsmath}
 \usepackage{tikz}
 \usetikzlibrary{shapes, automata, positioning}
 \usepackage{circuitikz}
@@ -148,10 +149,111 @@ colonna gli ingressi per una migliore leggibilità.
 			FC\hspace{0.3mm}0  & PrF/01 & PrF/01 & PrF/01 & PrF/00 & PrF/01 & SeC/00 & PrF/01 \\
 			\hline
 			FF\hspace{0.5mm}0  & Par/11 & Par/11 & Par/11 & PrF/00 & Par/11 & Par/11 & SeF/00 \\
-			\hline
 		\end{tabular}}
-	\caption{Diagramma degli stati del controllore}
+	\caption{State Transition Table del controllore (Mealy)}
 \end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[shorten >=1pt,node distance=3.7cm,auto]
+		\tikzstyle{every state}=[fill={rgb:black,1;white,10}]
+
+		\node[state] (Par)                {$Par$};
+		\node (L)   [left of=Par]  {};
+		\node (R)   [right of=Par] {};
+		\node[state] (PrS) [above of=L]   {$PrS$};
+		\node[state] (PrC) [above of=Par] {$PrC$};
+		\node[state] (PrF) [above of=R]   {$PrF$};
+		\node[state] (SeS) [below of=L]   {$SeS$};
+		\node[state] (SeC) [below of=Par] {$SeC$};
+		\node[state] (SeF) [below of=R]   {$SeF$};
+		\node at (PrS) [xshift=-1.35cm, yshift=1.3cm,align=center,scale=0.7] (prs1) { $\stackrel{\text{CS0/01}}{\text{PrC}}$};
+		\node at (PrS) [xshift=-0.45cm, yshift=1.3cm,align=center,scale=0.7] (prs2) { $\stackrel{\text{FC0/01}}{\text{PrF}}$};
+		\node at (PrS) [xshift=0.45cm, yshift=1.3cm,align=center,scale=0.7] (prs3) { $\stackrel{\text{FS/10}}{\text{SeS}}$};
+		\node at (PrS) [xshift=1.35cm, yshift=1.3cm,align=center,scale=0.7] (prs4) { $\stackrel{\text{CF0/10}}{\text{SeF}}$};
+		\node at (PrC) [xshift=-1.35cm, yshift=1.3cm,align=center,scale=0.7] (prc1) { $\stackrel{\text{SF0/01}}{\text{PrS}}$};
+		\node at (PrC) [xshift=-0.45cm, yshift=1.3cm,align=center,scale=0.7] (prc2) { $\stackrel{\text{FC0/01}}{\text{PrF}}$};
+		\node at (PrC) [xshift=0.45cm, yshift=1.3cm,align=center,scale=0.7] (prc3) { $\stackrel{\text{FS0/10}}{\text{SeS}}$};
+		\node at (PrC) [xshift=1.35cm, yshift=1.3cm,align=center,scale=0.7] (prc4) { $\stackrel{\text{SC0/10}}{\text{SeC}}$};
+		\node at (PrF) [xshift=-1.35cm, yshift=1.3cm,align=center,scale=0.7] (prf1) { $\stackrel{\text{SF0/01}}{\text{PrS}}$};
+		\node at (PrF) [xshift=-0.45cm, yshift=1.3cm,align=center,scale=0.7] (prf2) { $\stackrel{\text{CS0/01}}{\text{PrC}}$};
+		\node at (PrF) [xshift=0.45cm, yshift=1.3cm,align=center,scale=0.7] (prf3) { $\stackrel{\text{SC0/10}}{\text{SeC}}$};
+		\node at (PrF) [xshift=1.35cm, yshift=1.3cm,align=center,scale=0.7] (prf4) { $\stackrel{\text{CF0/10}}{\text{SeF}}$};
+		\node at (SeS) [xshift=-1.35cm, yshift=-1.3cm,align=center,scale=0.7] (ses1) { $\underset{\text{SC0/10}}{\text{SeC}}$};
+		\node at (SeS) [xshift=-0.45cm, yshift=-1.3cm,align=center,scale=0.7] (ses2) { $\underset{\text{CF0/10}}{\text{SeF}}$};
+		\node at (SeS) [xshift=0.45cm, yshift=-1.3cm,align=center,scale=0.7] (ses3) { $\underset{\text{SF0/01}}{\text{PrS}}$};
+		\node at (SeS) [xshift=1.35cm, yshift=-1.3cm,align=center,scale=0.7] (ses4) { $\underset{\text{FC0/01}}{\text{PrF}}$};
+		\node at (SeC) [xshift=-1.35cm, yshift=-1.3cm,align=center,scale=0.7] (sec1) { $\underset{\text{FS0/10}}{\text{SeS}}$};
+		\node at (SeC) [xshift=-0.45cm, yshift=-1.3cm,align=center,scale=0.7] (sec2) { $\underset{\text{CF0/10}}{\text{SeF}}$};
+		\node at (SeC) [xshift=0.45cm, yshift=-1.3cm,align=center,scale=0.7] (sec3) { $\underset{\text{SF0/01}}{\text{PrS}}$};
+		\node at (SeC) [xshift=1.35cm, yshift=-1.3cm,align=center,scale=0.7] (sec4) { $\underset{\text{CS0/01}}{\text{PrC}}$};
+		\node at (SeF) [xshift=-1.35cm, yshift=-1.3cm,align=center,scale=0.7] (sef1) { $\underset{\text{FS0/10}}{\text{SeS}}$};
+		\node at (SeF) [xshift=-0.45cm, yshift=-1.3cm,align=center,scale=0.7] (sef2) { $\underset{\text{SC0/10}}{\text{SeC}}$};
+		\node at (SeF) [xshift=0.45cm, yshift=-1.3cm,align=center,scale=0.7] (sef3) { $\underset{\text{CS0/01}}{\text{PrC}}$};
+		\node at (SeF) [xshift=1.35cm, yshift=-1.3cm,align=center,scale=0.7] (sef4) { $\underset{\text{FC0/01}}{\text{PrF}}$};
+
+		\path[->]
+		(Par) edge [loop left] node[scale=0.6, align=center] {N-0/00\\-N0/00\\--1/00} (   )
+		edge [loop right] node[scale=0.6, align=center] {SS0/11\\CC0/11\\FF0/11} (   );
+		\path[->]
+		(Par) edge [bend left=10] node[scale=0.6, align=center] {SF0/01} (PrS)
+		(PrS) edge [loop left] node[scale=0.6, align=center] {S-0/00\\N-0/00\\-N0/00} (   )
+		(PrS) edge [bend left=10] node[scale=0.6, align=center, xshift=-6] {CC0/11\\FF0/11\\--1/00} (Par);
+		\path[->]
+		(Par) edge [bend left=10] node[scale=0.6, align=center, xshift=2] {CS0/01} (PrC)
+		(PrC) edge [loop left] node[scale=0.6, align=center] {C-0/00\\N-0/00\\-N0/00} (   )
+		(PrC) edge [bend left=10] node[scale=0.6, align=center, yshift=30] {SS0/11\\FF0/11\\--1/00} (Par);
+		\path[->]
+		(Par) edge [bend left=10] node[scale=0.6, align=center, yshift=30, xshift=35] {FC0/01} (PrF)
+		(PrF) edge [loop right] node[scale=0.6, align=center] {F-0/00\\N-0/00\\-N0/00} (   )
+		(PrF) edge [bend left=10] node[scale=0.6, align=center] {SS0/11\\CC0/11\\--1/00} (Par);
+		\path[->]
+		(Par) edge [bend left=10] node[scale=0.6, align=center, yshift=-20, xshift=-22] {FS0/10} (SeS)
+		(SeS) edge [loop left] node[scale=0.6, align=center] {S-0/00\\N-0/00\\-N0/00} (   )
+		(SeS) edge [bend left=10] node[scale=0.6, align=center] {CC0/11\\FF0/11\\--1/00} (Par);
+		\path[->]
+		(Par) edge [bend left=10] node[scale=0.6, align=center] {SC0/10} (SeC)
+		(SeC) edge [loop left] node[scale=0.6, align=center] {C-0/00\\N-0/00\\-N0/00} (   )
+		(SeC) edge [bend left=10] node[scale=0.6, align=center, yshift=-15] {SS0/11\\FF0/11\\--1/00} (Par);
+		\path[->]
+		(Par) edge [bend left=10] node[scale=0.6, align=center] {CF0/10} (SeF)
+		(SeF) edge [loop right] node[scale=0.6, align=center] {F-0/00\\N-0/00\\-N0/00} (   )
+		(SeF) edge [bend left=10] node[scale=0.6, align=center, yshift=-12, xshift=20] {SS0/11\\CC0/11\\--1/00} (Par);
+
+		\path[->]
+		(PrS) edge [] node[scale=0.7, align=center] {} (prs1)
+    (PrS) edge [] node[scale=0.7, align=center] {} (prs2)
+    (PrS) edge [] node[scale=0.7, align=center] {} (prs3)
+    (PrS) edge [] node[scale=0.7, align=center] {} (prs4);
+    \path[->]
+    (PrC) edge [] node[scale=0.7, align=center] {} (prc1)
+    (PrC) edge [] node[scale=0.7, align=center] {} (prc2)
+    (PrC) edge [] node[scale=0.7, align=center] {} (prc3)
+    (PrC) edge [] node[scale=0.7, align=center] {} (prc4);
+    \path[->]
+    (PrF) edge [] node[scale=0.7, align=center] {} (prf1)
+    (PrF) edge [] node[scale=0.7, align=center] {} (prf2)
+    (PrF) edge [] node[scale=0.7, align=center] {} (prf3)
+    (PrF) edge [] node[scale=0.7, align=center] {} (prf4);
+    \path[->]
+    (SeS) edge [] node[scale=0.7, align=center] {} (ses1)
+    (SeS) edge [] node[scale=0.7, align=center] {} (ses2)
+    (SeS) edge [] node[scale=0.7, align=center] {} (ses3)
+    (SeS) edge [] node[scale=0.7, align=center] {} (ses4);
+    \path[->]
+    (SeC) edge [] node[scale=0.7, align=center] {} (sec1)
+    (SeC) edge [] node[scale=0.7, align=center] {} (sec2)
+    (SeC) edge [] node[scale=0.7, align=center] {} (sec3)
+    (SeC) edge [] node[scale=0.7, align=center] {} (sec4);
+    \path[->]
+    (SeF) edge [] node[scale=0.7, align=center] {} (sef1)
+    (SeF) edge [] node[scale=0.7, align=center] {} (sef2)
+    (SeF) edge [] node[scale=0.7, align=center] {} (sef3)
+    (SeF) edge [] node[scale=0.7, align=center] {} (sef4);
+	\end{tikzpicture}
+  \caption{State Transition Graph del controllore}
+\end{figure}
+
 
 \section{Architettura del datapath}
 Le componenti che sono state utilizzate per la realizzazione del Data-path sono:
@@ -394,6 +496,7 @@ Le componenti che sono state utilizzate per la realizzazione del Data-path sono:
 		\draw[-latex] (partita.south) -- ++(0,-1) node[below] {partita};
 
 	\end{circuitikz}
+  \caption{Componente Partita}
 \end{figure}
 
 \begin{figure}[H]
