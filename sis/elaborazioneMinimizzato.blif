@@ -1,0 +1,128 @@
+.model elaborazioneMinimizzato
+.inputs manche1 manche0 primo1 primo0 secondo1 secondo0 inizia
+.outputs partita1 partita0
+.latch    muxv3 v3 re NIL 0
+.latch    muxv2 v2 re NIL 0
+.latch    muxv1 v1 re NIL 0
+.latch    muxv0 v0 re NIL 0
+.latch    muxmm4 mm4 re NIL 0
+.latch    muxmm3 mm3 re NIL 0
+.latch    muxmm2 mm2 re NIL 0
+.latch    muxmm1 mm1 re NIL 0
+.latch    muxmm0 mm0 re NIL 0
+.latch    muxmi4 mi4 re NIL 0
+.latch    muxmi3 mi3 re NIL 0
+.latch    muxmi2 mi2 re NIL 0
+.latch    muxmi1 mi1 re NIL 0
+.latch    muxmi0 mi0 re NIL 0
+.names partita0 muxv3 muxv2 muxv1 muxv0 MU3 [230] [235] partita1
+-1---1-- 1
+-10---1- 1
+-1-0--1- 1
+-1--0-1- 1
+1---0--0 1
+.names inizia muxv3 MU3 [230] [235] partita0
+001-- 1
+-0-11 1
+.names primo1 primo0 inizia mm4 muxmm4
+--01 1
+111- 1
+.names primo1 primo0 inizia mm3 muxmm3
+--01 1
+011- 1
+101- 1
+.names primo0 inizia mm2 muxmm2
+01- 1
+-01 1
+.names secondo1 inizia mm1 muxmm1
+11- 1
+-01 1
+.names secondo0 inizia mm0 muxmm0
+11- 1
+-01 1
+.names inizia mi4 [236] muxmi4
+011 1
+000 1
+.names inizia mi3 [51] muxmi3
+001 1
+010 1
+.names inizia mi2 mi1 muxmi1 [51] muxmi2
+01--0 1
+0-100 1
+.names inizia mi1 mi0 muxmi0 [232] muxmi1
+-1-1- 1
+01--0 1
+0010- 1
+.names inizia mi0 [232] muxmi0
+001 1
+010 1
+.names inizia [231] [233] muxv3
+011 1
+000 1
+.names inizia [25] [147] muxv2
+001 1
+010 1
+.names inizia v0 muxv0 [24] [150] muxv1
+--11- 1
+00-1- 1
+01-00 1
+.names inizia [150] muxv0
+01 1
+.names mi2 mi1 mi0 [232] [51]
+1111 1
+.names v2 [25] [147] [145]
+10- 1
+-11 1
+.names v2 [231] [25]
+11 1
+00 1
+.names v1 v0 [24] [150] [147]
+1-0- 1
+-110 1
+.names v1 [231] [24]
+11 1
+00 1
+.names manche1 manche0 v0 [231] [232] [150]
+--00- 1
+--1-0 1
+111-- 1
+010-- 1
+.names mm0 muxmi4 muxmi3 muxmi2 muxmi1 muxmi0 X4 [130] [131] [132] MU3
+-1----1--- 1
+--1---01-- 1
+---1--001- 1
+----1-0001 1
+0-----0000 1
+-----10000 1
+.names muxmi4 mm4 X4
+01 1
+10 1
+.names muxmi3 mm3 [130]
+01 1
+10 1
+.names muxmi2 mm2 [131]
+01 1
+10 1
+.names muxmi1 mm1 [132]
+01 1
+10 1
+.names muxmi4 muxmi3 muxmi2 [230]
+1-- 1
+-1- 1
+--1 1
+.names manche1 manche0 [231]
+0- 1
+-1 1
+.names manche1 manche0 [232]
+1- 1
+-1 1
+.names v3 [145] [233]
+01 1
+10 1
+.names muxv2 muxv1 [235]
+1- 1
+-1 1
+.names mi3 [51] [236]
+0- 1
+-0 1
+.end

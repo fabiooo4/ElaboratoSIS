@@ -1,9 +1,9 @@
-.model controlloAssegnato
+.model controlloMinimizzato
 .inputs primo1 primo0 secondo1 secondo0 inizia
 .outputs manche1 manche0
-.latch    [12] LatchOut_v5   0
-.latch    [13] LatchOut_v6   1
-.latch    [14] LatchOut_v7   0
+.latch    [3521] LatchOut_v5   0
+.latch    [3522] LatchOut_v6   1
+.latch    [3523] LatchOut_v7   0
 .start_kiss
 .i 5
 .o 2
@@ -91,90 +91,64 @@
 .code SeF 000
 .code SeS 011
 .code PrF 100
+.names primo1 secondo1 inizia LatchOut_v5 manche1 manche0 [3521]
+-1--01 1
+0---10 1
+--0100 1
+.names inizia LatchOut_v6 manche1 manche0 [3535] [3522]
+1---- 1
+--1-1 1
+---10 1
+-100- 1
+.names secondo1 secondo0 inizia LatchOut_v7 manche1 manche0 [3523]
+-1--01 1
+0---10 1
+--0100 1
 .names primo1 primo0 secondo1 secondo0 inizia LatchOut_v5 LatchOut_v6 \
-LatchOut_v7 [12]
-00--01-- 1
---0001-- 1
-0---01-1 1
-11--010- 1
----00110 1
-111000-- 1
-011000-- 1
-01100-0- 1
-11100--1 1
-011100-1 1
-011101-0 1
-01110-10 1
-.names primo1 primo0 secondo1 secondo0 inizia LatchOut_v5 LatchOut_v6 \
-LatchOut_v7 [13]
-----1--- 1
-0-----1- 1
---00--1- 1
---0-0011 1
----00110 1
-110100-- 1
-11110-1- 1
-01100-0- 1
-11110--1 1
-01-10-01 1
-01010--0 1
-1101011- 1
-10100-11 1
-011101-0 1
-101000-0 1
-10100-00 1
-.names primo1 primo0 secondo1 secondo0 inizia LatchOut_v5 LatchOut_v6 \
-LatchOut_v7 [14]
-00--0--1 1
---000--1 1
-0---01-1 1
--0--0-01 1
---0-0011 1
-100101-- 1
-110100-- 1
-10010--0 1
-1101011- 1
-011100-1 1
-011101-0 1
-01110-10 1
-.names primo1 primo0 secondo1 secondo0 inizia LatchOut_v5 LatchOut_v6 \
-LatchOut_v7 manche1
-1-110-1- 1
-011000-- 1
-01100-0- 1
-101-010- 1
--101000- 1
-11110--1 1
-01010--0 1
--1010-10 1
-1101011- 1
-10100-11 1
-101000-0 1
-.names primo1 primo0 secondo1 secondo0 inizia LatchOut_v5 LatchOut_v6 \
-LatchOut_v7 manche0
-100101-- 1
-111000-- 1
-11110-1- 1
-11110--1 1
-11100--1 1
-01-10-01 1
-01010--0 1
-10010--0 1
-011100-1 1
-10100-11 1
-011101-0 1
-101000-0 1
-01110-10 1
-10100-00 1
+LatchOut_v7 [3531] [3532] [3533] [3534] [3535] [3538] manche1
+--01----01---- 1
+0-0------10--- 1
+1--1-----1-0-- 1
+1---0-1-----0- 1
+1------1-1--0- 1
+0--0-------1-1 1
+101-0---1----- 1
+101000-0------ 1
+.names primo1 secondo1 secondo0 inizia LatchOut_v5 LatchOut_v6 LatchOut_v7 \
+manche1 [3531] [3532] [3533] [3535] [3538] manche0
+0-1----1----- 1
+--0----1-0--- 1
+1-----1-----1 1
+-----1----0-1 1
+0-------110-- 1
+----0--0--1-1 1
+10-0-----00-- 1
+1-101----0-1- 1
+.names LatchOut_v5 LatchOut_v6 LatchOut_v7 [3531]
+10- 1
+-11 1
+.names primo0 inizia [3532]
+10 1
+.names secondo0 LatchOut_v7 [3533]
+0- 1
+-1 1
+.names LatchOut_v5 LatchOut_v6 [3534]
+0- 1
+-0 1
+.names secondo1 secondo0 [3535]
+0- 1
+-0 1
+.names secondo1 [3532] [3538]
+11 1
 .exdc 
 .inputs primo1 primo0 secondo1 secondo0 inizia LatchOut_v5 LatchOut_v6 \
 LatchOut_v7
-.outputs [12] [13] [14] manche1 manche0
-.names LatchOut_v5 LatchOut_v6 LatchOut_v7 [12]
+.outputs [3521] [3522] [3523] manche1 manche0
+.names LatchOut_v5 LatchOut_v6 LatchOut_v7 [3521]
 101 1
-.names LatchOut_v5 LatchOut_v6 LatchOut_v7 [13]
+.names LatchOut_v5 LatchOut_v6 LatchOut_v7 [3522]
 101 1
-.names LatchOut_v5 LatchOut_v6 LatchOut_v7 [14]
+.names LatchOut_v5 LatchOut_v6 LatchOut_v7 [3523]
 101 1
 .names LatchOut_v5 LatchOut_v6 LatchOut_v7 manche1
 101 1

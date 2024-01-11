@@ -901,33 +901,172 @@ tra il modello in verilog e quello in sis.
 \end{enumerate}
 
 \section{Statistiche del circuito}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
+Di seguito sono riportate le statistiche del circuito implementato in sis.
 
 \subsection{Prima della minimizzazione}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
+Le statistiche della FSM prima della minimizzazione sono le seguenti:
+\begin{lstlisting}
+  sis> print_stats
+  controllo       pi= 5   po= 2   nodes=  2       latches= 0
+  lits(sop)=   0  #states(STG)=   7
+  sis> state_assign jedi
+  Running jedi, written by Bill Lin,  UC Berkeley
+  sis> print_stats
+  controllo       pi= 5   po= 2   nodes=  5       latches= 3
+  lits(sop)= 379  #states(STG)=   7
+\end{lstlisting}
 
+\noindent Le statistiche del Datapath prima della minimizzazione sono le seguenti:
+\begin{lstlisting}
+  sis> print_stats
+  elaborazione    pi= 7   po= 2   nodes=150       latches=14
+  lits(sop)= 606
+\end{lstlisting}
+
+\noindent Le statitiche della FSMD prima della minimizzazione sono le seguenti:
+\begin{lstlisting}
+  sis> print_stats
+  MorraCinese     pi= 5   po= 4   nodes=155       latches=17
+  lits(sop)= 985
+\end{lstlisting}
 
 \subsection{Dopo la minimizzazione}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
 
 \subsubsection{Minimizzazione degli stati}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
+\begin{lstlisting}
+  sis> read_blif controllo.blif
+  sis> state_minimize stamina
+  Running stamina, written by June Rho, University of Colorado at Boulder
+  Number of states in original machine : 7
+  Number of states in minimized machine : 7
+  sis> state_assign jedi
+  Running jedi, written by Bill Lin,  UC Berkeley
+  sis> stg_to_network
+  sis> print_stats
+  controllo       pi= 5   po= 2   nodes=  5       latches= 3
+  lits(sop)= 379  #states(STG)=   7
+  sis> full_simplify
+  sis> print_stats
+  controllo       pi= 5   po= 2   nodes=  5       latches= 3
+  lits(sop)= 152  #states(STG)=   7
+  sis> source script.rugged
+  sis> print_stats
+  controllo       pi= 5   po= 2   nodes= 11       latches= 3
+  lits(sop)= 109  #states(STG)=   7
+  sis> write_blif controlloMinimizzato.blif
+\end{lstlisting}
 
 \subsubsection{Minimizzazione per area}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
+Dopo aver minimizzato gli stati della FSM, abbiamo minimizzato il circuito dell'elaborazione eseguendo le
+seguenti operazioni:
+\begin{lstlisting}
+  sis> print_stats
+  elaborazione    pi= 7   po= 2   nodes=150       latches=14
+  lits(sop)= 606
+  sis> full_simplify
+  sis> print_stats
+  elaborazione    pi= 7   po= 2   nodes=150       latches=14
+  lits(sop)= 231
+  sis> source script.rugged
+  sis> print_stats
+  elaborazione    pi= 7   po= 2   nodes= 33       latches=14
+  lits(sop)= 188
+  sis> write_blif elaborazioneMinimizzato.blif
+\end{lstlisting}
 
-
+\noindent Dopo aver minimizzato sia la FSM che il Datapath, abbiamo minimizzato il circuito finale eseguendo le
+seguenti operazioni:
+\begin{lstlisting}
+  sis> print_stats
+  MorraCinese     pi= 5   po= 4   nodes= 44       latches=17
+  lits(sop)= 297
+  sis> full_simplify
+  sis> print_stats
+  MorraCinese     pi= 5   po= 4   nodes= 44       latches=17
+  lits(sop)= 285
+\end{lstlisting}
+\noindent Non abbiamo eseguito lo script \emph{script.rugged} in quanto avremmo ottenuto un letterale e un nodo
+in più rispetto alla sola \emph{full\_simplify}.
 
 \section{Numero di gate e ritardo}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
+Di seguito sono riportate le statistiche del circuito implementato in sis riguardanti il numero di gate e il ritardo.
 
 \subsection{Prima della minimizzazione}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
+Le statistiche di numero di gate e ritardo della FSMD prima della minimizzazione sono le seguenti:
+\vspace{1em}
+\begin{lstlisting}
+  sis> read_library synch.genlib
+  sis> map -s
+  warning: unknown latch type at node '{[12]}' (RISING_EDGE assumed)
+  warning: unknown latch type at node '{[13]}' (RISING_EDGE assumed)
+  warning: unknown latch type at node '{[14]}' (RISING_EDGE assumed)
+  WARNING: uses as primary input drive the value (0.20,0.20)
+  WARNING: uses as primary input arrival the value (0.00,0.00)
+  WARNING: uses as primary input max load limit the value (999.00)
+  WARNING: uses as primary output required the value (0.00,0.00)
+  WARNING: uses as primary output load the value 1.00
+  >>> before removing serial inverters <<<
+  # of outputs:          21
+  total gate area:       7268.00
+  maximum arrival time: (39.80,39.80)
+  maximum po slack:     (-3.40,-3.40)
+  minimum po slack:     (-39.80,-39.80)
+  total neg slack:      (-455.40,-455.40)
+  # of failing outputs:  21
+  >>> before removing parallel inverters <<<
+  # of outputs:          21
+  total gate area:       7268.00
+  maximum arrival time: (39.80,39.80)
+  maximum po slack:     (-3.40,-3.40)
+  minimum po slack:     (-39.80,-39.80)
+  total neg slack:      (-455.40,-455.40)
+  # of failing outputs:  21
+  # of outputs:          21
+  total gate area:       7044.00
+  maximum arrival time: (39.80,39.80)
+  maximum po slack:     (-3.40,-3.40)
+  minimum po slack:     (-39.80,-39.80)
+  total neg slack:      (-457.40,-457.40)
+  # of failing outputs:  21
+\end{lstlisting}
 
 \subsection{Dopo la minimizzazione per area}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
-
-
+Le statistiche di numero di gate e ritardo della FSMD dopo la minimizzazione per area sono le seguenti:
+\begin{lstlisting}
+  sis> read_library synch.genlib
+  sis> map -s
+  warning: unknown latch type at node '{[3521]}' (RISING_EDGE assumed)
+  warning: unknown latch type at node '{[3522]}' (RISING_EDGE assumed)
+  warning: unknown latch type at node '{[3523]}' (RISING_EDGE assumed)
+  WARNING: uses as primary input drive the value (0.20,0.20)
+  WARNING: uses as primary input arrival the value (0.00,0.00)
+  WARNING: uses as primary input max load limit the value (999.00)
+  WARNING: uses as primary output required the value (0.00,0.00)
+  WARNING: uses as primary output load the value 1.00
+  >>> before removing serial inverters <<<
+  # of outputs:          21
+  total gate area:       5828.00
+  maximum arrival time: (48.60,48.60)
+  maximum po slack:     (-3.20,-3.20)
+  minimum po slack:     (-48.60,-48.60)
+  total neg slack:      (-563.20,-563.20)
+  # of failing outputs:  21
+  >>> before removing parallel inverters <<<
+  # of outputs:          21
+  total gate area:       5796.00
+  maximum arrival time: (48.60,48.60)
+  maximum po slack:     (-3.20,-3.20)
+  minimum po slack:     (-48.60,-48.60)
+  total neg slack:      (-563.20,-563.20)
+  # of failing outputs:  21
+  # of outputs:          21
+  total gate area:       5396.00
+  maximum arrival time: (45.80,45.80)
+  maximum po slack:     (-3.20,-3.20)
+  minimum po slack:     (-45.80,-45.80)
+  total neg slack:      (-527.00,-527.00)
+  # of failing outputs:  21
+\end{lstlisting}
 
 \section{Scelte progettuali}
 \subsection{FSM}
@@ -952,4 +1091,7 @@ bit del registro \textbf{vantaggio} e il numero di bit dei registri \textbf{manc
 sono diversi. Avremmo potuto considerare \textbf{vantaggio} da 5 bit per poter riutilizzare componenti già presenti,
 ma abbiamo preferito ottimizzare il circuito scegliendo il minor numero di bit necessari per ogni componente.
 
+\subsection{Warning}
+Simulando il circuito in sis vengono generati dei warning riguardanti a uscite che non vengono utilizzate, come
+ad esempio i riporti dei sommatori. Questi warning possono essere ignorati in quanto non influiscono sul funzionamento.
 \end{document}
