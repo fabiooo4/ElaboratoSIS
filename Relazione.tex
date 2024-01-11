@@ -60,8 +60,7 @@ Il circuito ha \textbf{due uscite}:
 Il circuito è costituito da FSM (Controllore) e Data-path (elaboratore). I due file che racchiudono la rappresentazione di tali componenti sono presenti nella cartella SIS.
 Sono presenti entrambi in modo che il circuito sia completo e possa funzionare.
 
-Di seguito verranno riportati i componenti utilizzati.
-
+Di seguito vengono riportati tutti i componenti utilizzati per la realizzazione di questo circuito:
 \section{Diagramma degli stati del controllore}
 È riportato di seguito il diagramma degli stati del controllore rappresentato in tabella di mealy
 con gli ingressi codificati nel seguente modo:
@@ -117,16 +116,41 @@ colonna gli ingressi per una migliore leggibilità.
 
 
 \section{Architettura del datapath}
-Le componenti che sono state utilizzate per la realizzazione del Data-path sono:
+Le componenti che abbiamo utilizzato per l'elaborazione del nostro circuito sono le seguenti, presentate sottoforma di \textbf{Nome Componente} e \textbf{Numero di Occorrenze}.
+
 \begin{itemize}
-	\item
+	\item \textbf{Mux a 4 Ingressi da 5 bit}: 1
+	      Utilizzato per incrementare il \textbf{mancheIdx} durante la partita nel caso la manche risulti valida. Il Mux aumenta il valore di mancheIdx basandosi sull'esito di \textbf{Manche}.
+	\item \textbf{Mux a 4 Ingressi da 4 bit}: 1
+	      Utilizzato per incrementare o decrementare il valore di \textbf{vantaggio}. Il Mux modifica il valore di vantaggio basandosi sull'esito di \textbf{Manche}.
+	\item \textbf{Mux a 2 Ingressi da 5 bit}: 2
+	      Utilizzati per decidere quale valore inserire all'interno dei registri di \textbf{mancheIdx} e \textbf{maxManche}. Il Mux determina il valore basandosi sul valore di \textbf{Inizia}.
+	\item \textbf{Mux a 2 Ingressi da 4 bit}: 1
+	      Utilizzato per decidere quale valore inserire all'interno del registro di \textbf{Vantaggio}. Il Mux discrimina quale valore inserire basandosi sul valore di \textbf{Inizia}.
+	\item \textbf{Mux a 2 Ingressi da 2 bit}: 2
+	      Utilizzati nel componente \textbf{Partita}. I due Mux insieme determinano quale valore di \textbf{Partita} dovrà essere stampato in \textbf{Output}. I due Mux si basano rispettivamente su: Valore di un Maggiore uguale che confronta \textbf{mancheIdx} e \textbf{maxManche}, e il valore di \textbf{Inizia}.
+	\item \textbf{Sommatore a 5 bit}: 3
+	      Utilizzati per sommare 2 numeri e fornire in output un numero a 5 bit. Utilizzati per determinare e modificare il valore di \textbf{maxManche} e \textbf{mancheIdx}.
+	\item \textbf{Sommatore a 4 bit}: 1
+	      Utilizzato per sommare 2 numeri e fornire in output un numero a 4 bit. Utilizzato per modificare il valore di \textbf{Vantaggio}.
+	\item \textbf{Registro a 5 bit}: 2
+	      Utilizzati per salvare in memoria i valori di \textbf{maxManche} e \textbf{mancheIdx}.
+	\item \textbf{Registro a 4 bit}: 1
+	      Utilizzato per salvare in memoria il valore di \textbf{Vantaggio}.
+	\item \textbf{And}: 2
+	      Utilizzati per verificare se due condizioni sono vere allo stesso tempo. Si trovano nel componente \textbf{Partita} del Data-path.
+	\item \textbf{Maggiore uguale da 5 bit}: 1
+	      Utilizzato per confrontare il valore di \textbf{mancheIdx} e \textbf{maxManche}.
+	\item \textbf{Maggiore uguale da 4 bit}: 5
+	      Utilizzati per comparare il valore di \textbf{Vantaggio} con alcune \textbf{Costanti}.
 \end{itemize}
 
-
 \section{Simulazioni}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
 
+Gli ingressi sono: \textbf{Primo1, Primo0, Secondo1, Secondo0, Inizia}.
+Le uscite sono: \textbf{Manche1, Manche0, Partita1, Partita0}.
 
+Abbiamo svolto una singola simulazione prendendo in considerazione \textbf{Quattro Partite}, ogniuna con un diverso numero di \textbf{Manche massime} e di svolgimento delle manche stesse.
 
 \section{Statistiche del circuito}
 Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
