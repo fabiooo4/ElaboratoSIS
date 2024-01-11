@@ -2,6 +2,8 @@
 \usepackage[italian]{babel}
 \usepackage{float}
 \usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{listings}
 \usepackage{tikz}
 \usetikzlibrary{shapes, automata, positioning}
 \usepackage{circuitikz}
@@ -9,6 +11,55 @@
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=false,
+}
+
+% Code blocks
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=5pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
 }
 
 \begin{document}
@@ -66,6 +117,14 @@ Il circuito ha \textbf{due uscite}:
 	      \end{itemize}
 \end{itemize}
 \section{Architettura generale}
+Il circuito è costituito da FSM (Controllore) e Datapath (elaboratore). I due file che racchiudono la rappresentazione di tali componenti sono presenti nella cartella \emph{sis}.
+I due componenti sono collegati tra di loro in un unico circuito sequenziale chiamato \emph{FSMD.blif}.
+
+\noindent Nella figura \ref{fig:architettura_generale} è rappresentata l'architettura generale del circuito
+che prende in input i segnali \textbf{primo}, \textbf{secondo} e \textbf{inizia} condivisi tra FSM e Datapath e
+restituisce in output i segnali \textbf{manche} (dalla FSM) e \textbf{partita} (dal Datapath). Il segnale di
+clock è lo stesso per entrambi i componenti.
+
 \begin{figure}[H]
 	\begin{center}
 		\begin{tikzpicture}
@@ -93,20 +152,19 @@ Il circuito ha \textbf{due uscite}:
 		\end{tikzpicture}
 	\end{center}
 	\caption{Architettura generale della FSMD}
+	\label{fig:architettura_generale}
 \end{figure}
-Il circuito è costituito da FSM (Controllore) e Data-path (elaboratore). I due file che racchiudono la rappresentazione di tali componenti sono presenti nella cartella SIS.
-Sono presenti entrambi in modo che il circuito sia completo e possa funzionare.
 
 \section{Diagramma degli stati del controllore}
-È riportato di seguito il diagramma degli stati del controllore rappresentato in tabella di mealy
-con gli ingressi codificati nel seguente modo:
+È riportata nella tabella \ref{tab:stg} la State Transition Table del controllore con la rappresentazione di Mealy.
+Gli ingressi sono codificati nel seguente modo per agevolare la lettura della tabella:
 \begin{itemize}
 	\item \textbf{Nessuna scelta}: $N = 00$
 	\item \textbf{Sasso}: $S = 01$
 	\item \textbf{Carta}: $C = 10$
 	\item \textbf{Forbice}: $F = 11$
 \end{itemize}
-e gli stati codificati come:
+e gli stati codificati nel seguente modo:
 \begin{itemize}
 	\item \textbf{Par}: Pareggio
 	\item \textbf{PrS}: Primo giocatore vince con sasso
@@ -149,7 +207,12 @@ colonna gli ingressi per una migliore leggibilità.
 			FF\hspace{0.5mm}0  & Par/11 & Par/11 & Par/11 & PrF/00 & Par/11 & Par/11 & SeF/00 \\
 		\end{tabular}}
 	\caption{State Transition Table del controllore (Mealy)}
+	\label{tab:stg}
 \end{table}
+
+\noindent Nella figura \ref{fig:stg} è rappresentato il State Transition Graph del controllore. Per una migliore
+leggibilità sono stati omessi gli archi che portano da uno stato in cui vince uno dei due giocatori a tutti gli altri
+stati in cui avrebbe vinto un giocatore, si è deciso invece di riportare il nome dello stato prossimo una seconda volta.
 
 \begin{figure}[H]
 	\centering
@@ -220,68 +283,110 @@ colonna gli ingressi per una migliore leggibilità.
 
 		\path[->]
 		(PrS) edge [] node[scale=0.7, align=center] {} (prs1)
-    (PrS) edge [] node[scale=0.7, align=center] {} (prs2)
-    (PrS) edge [] node[scale=0.7, align=center] {} (prs3)
-    (PrS) edge [] node[scale=0.7, align=center] {} (prs4);
-    \path[->]
-    (PrC) edge [] node[scale=0.7, align=center] {} (prc1)
-    (PrC) edge [] node[scale=0.7, align=center] {} (prc2)
-    (PrC) edge [] node[scale=0.7, align=center] {} (prc3)
-    (PrC) edge [] node[scale=0.7, align=center] {} (prc4);
-    \path[->]
-    (PrF) edge [] node[scale=0.7, align=center] {} (prf1)
-    (PrF) edge [] node[scale=0.7, align=center] {} (prf2)
-    (PrF) edge [] node[scale=0.7, align=center] {} (prf3)
-    (PrF) edge [] node[scale=0.7, align=center] {} (prf4);
-    \path[->]
-    (SeS) edge [] node[scale=0.7, align=center] {} (ses1)
-    (SeS) edge [] node[scale=0.7, align=center] {} (ses2)
-    (SeS) edge [] node[scale=0.7, align=center] {} (ses3)
-    (SeS) edge [] node[scale=0.7, align=center] {} (ses4);
-    \path[->]
-    (SeC) edge [] node[scale=0.7, align=center] {} (sec1)
-    (SeC) edge [] node[scale=0.7, align=center] {} (sec2)
-    (SeC) edge [] node[scale=0.7, align=center] {} (sec3)
-    (SeC) edge [] node[scale=0.7, align=center] {} (sec4);
-    \path[->]
-    (SeF) edge [] node[scale=0.7, align=center] {} (sef1)
-    (SeF) edge [] node[scale=0.7, align=center] {} (sef2)
-    (SeF) edge [] node[scale=0.7, align=center] {} (sef3)
-    (SeF) edge [] node[scale=0.7, align=center] {} (sef4);
+		(PrS) edge [] node[scale=0.7, align=center] {} (prs2)
+		(PrS) edge [] node[scale=0.7, align=center] {} (prs3)
+		(PrS) edge [] node[scale=0.7, align=center] {} (prs4);
+		\path[->]
+		(PrC) edge [] node[scale=0.7, align=center] {} (prc1)
+		(PrC) edge [] node[scale=0.7, align=center] {} (prc2)
+		(PrC) edge [] node[scale=0.7, align=center] {} (prc3)
+		(PrC) edge [] node[scale=0.7, align=center] {} (prc4);
+		\path[->]
+		(PrF) edge [] node[scale=0.7, align=center] {} (prf1)
+		(PrF) edge [] node[scale=0.7, align=center] {} (prf2)
+		(PrF) edge [] node[scale=0.7, align=center] {} (prf3)
+		(PrF) edge [] node[scale=0.7, align=center] {} (prf4);
+		\path[->]
+		(SeS) edge [] node[scale=0.7, align=center] {} (ses1)
+		(SeS) edge [] node[scale=0.7, align=center] {} (ses2)
+		(SeS) edge [] node[scale=0.7, align=center] {} (ses3)
+		(SeS) edge [] node[scale=0.7, align=center] {} (ses4);
+		\path[->]
+		(SeC) edge [] node[scale=0.7, align=center] {} (sec1)
+		(SeC) edge [] node[scale=0.7, align=center] {} (sec2)
+		(SeC) edge [] node[scale=0.7, align=center] {} (sec3)
+		(SeC) edge [] node[scale=0.7, align=center] {} (sec4);
+		\path[->]
+		(SeF) edge [] node[scale=0.7, align=center] {} (sef1)
+		(SeF) edge [] node[scale=0.7, align=center] {} (sef2)
+		(SeF) edge [] node[scale=0.7, align=center] {} (sef3)
+		(SeF) edge [] node[scale=0.7, align=center] {} (sef4);
 	\end{tikzpicture}
-  \caption{State Transition Graph del controllore}
+	\caption{State Transition Graph del controllore}
+	\label{fig:stg}
 \end{figure}
 
 
 \section{Architettura del datapath}
-Le componenti che abbiamo utilizzato per l'elaborazione del nostro circuito sono le seguenti, presentate sottoforma di \textbf{Nome Componente} e \textbf{Numero di Occorrenze}.
+I componenti che sono stati utilizzati per l'elaborazione del circuito sono i seguenti, presentati sottoforma di \textbf{Nome Componente} e \textbf{Numero di Occorrenze}.
 
 \begin{itemize}
-	\item \textbf{Mux a 4 Ingressi da 5 bit}: 1
-	      Utilizzato per incrementare il \textbf{mancheIdx} durante la partita nel caso la manche risulti valida. Il Mux aumenta il valore di mancheIdx basandosi sull'esito di \textbf{Manche}.
-	\item \textbf{Mux a 4 Ingressi da 4 bit}: 1
-	      Utilizzato per incrementare o decrementare il valore di \textbf{vantaggio}. Il Mux modifica il valore di vantaggio basandosi sull'esito di \textbf{Manche}.
-	\item \textbf{Mux a 2 Ingressi da 5 bit}: 2
-	      Utilizzati per decidere quale valore inserire all'interno dei registri di \textbf{mancheIdx} e \textbf{maxManche}. Il Mux determina il valore basandosi sul valore di \textbf{Inizia}.
-	\item \textbf{Mux a 2 Ingressi da 4 bit}: 1
-	      Utilizzato per decidere quale valore inserire all'interno del registro di \textbf{Vantaggio}. Il Mux discrimina quale valore inserire basandosi sul valore di \textbf{Inizia}.
-	\item \textbf{Mux a 2 Ingressi da 2 bit}: 2
-	      Utilizzati nel componente \textbf{Partita}. I due Mux insieme determinano quale valore di \textbf{Partita} dovrà essere stampato in \textbf{Output}. I due Mux si basano rispettivamente su: Valore di un Maggiore uguale che confronta \textbf{mancheIdx} e \textbf{maxManche}, e il valore di \textbf{Inizia}.
-	\item \textbf{Sommatore a 5 bit}: 3
-	      Utilizzati per sommare 2 numeri e fornire in output un numero a 5 bit. Utilizzati per determinare e modificare il valore di \textbf{maxManche} e \textbf{mancheIdx}.
-	\item \textbf{Sommatore a 4 bit}: 1
-	      Utilizzato per sommare 2 numeri e fornire in output un numero a 4 bit. Utilizzato per modificare il valore di \textbf{Vantaggio}.
 	\item \textbf{Registro a 5 bit}: 2
-	      Utilizzati per salvare in memoria i valori di \textbf{maxManche} e \textbf{mancheIdx}.
+
+	      \noindent Utilizzati per salvare in memoria i valori di:
+	      \begin{itemize}
+		      \item \textbf{mancheIdx}: Indice della manche corrente;
+		      \item \textbf{maxManche}: Numero massimo di manche che possono essere giocate in una singola partita;
+	      \end{itemize}
 	\item \textbf{Registro a 4 bit}: 1
-	      Utilizzato per salvare in memoria il valore di \textbf{Vantaggio}.
+
+	      \noindent Utilizzato per salvare in memoria il valore di \textbf{vangaggio}. Il vantaggio è codificato in complemento
+	      a 2 in modo da poter calcolare il vantaggio di entrambi i giocatori con un singolo registro. Quando il
+	      vantaggio assume valori positivi è il giocatore 1 ad avere il vantaggio, quando assume valori negativi
+	      è il giocatore 2 ad avercelo.
+	\item \textbf{Mux a 4 Ingressi da 5 bit}: 1
+
+	      \noindent Utilizzato per incrementare il \textbf{mancheIdx} durante la partita solo nel caso la manche
+	      risulti valida. Il Mux dà in output \( 00001 \) se la manche è valida, \( 00000 \) altrimenti.
+	\item \textbf{Mux a 4 Ingressi da 4 bit}: 1
+
+	      \noindent Utilizzato per incrementare o decrementare il valore di \textbf{vantaggio}. Il Mux dà in output
+	      \( 0001 \) se il giocatore 1 ha vinto la manche, \( 1111 \) se il giocatore 2 ha vinto la manche,
+	      \( 0000 \) altrimenti. Visto che vantaggio è codificato in complemento a 2, il valore \( 1111 \) equivale
+	      a \( -1_{10} \).
+	\item \textbf{Mux a 2 Ingressi da 5 bit}: 2
+
+	      \noindent Utilizzati per decidere quale valore inserire all'interno dei registri di \textbf{mancheIdx}
+	      e \textbf{maxManche}. Il Mux inizializza i registri con il valore \( 00000 \) se il valore di \textbf{inizia}
+	      è uguale a \( 1 \), altrimenti inserisce il nuovo valore di \textbf{mancheIdx} e \textbf{maxManche} in input.
+	\item \textbf{Mux a 2 Ingressi da 4 bit}: 1
+
+	      \noindent Utilizzato per decidere quale valore inserire all'interno del registro di \textbf{vangaggio}.
+	      Il Mux inizializza il registro con il valore \( 0000 \) se il valore di \textbf{inizia} è uguale a \( 1 \),
+	      altrimenti inserisce il nuovo valore di \textbf{vangaggio} in input.
+	\item \textbf{Mux a 2 Ingressi da 2 bit}: 2
+
+	      \noindent Utilizzati nel componente \textbf{Partita}. I due Mux insieme determinano quale valore di
+	      \textbf{partita} dovrà essere stampato in \textbf{output}.
+	\item \textbf{Sommatore a 5 bit}: 3
+
+	      \noindent Utilizzati per sommare 2 numeri e fornire in output un numero a 5 bit.
+	      Il loro scopo è determinare e modificare il valore di \textbf{maxManche} e \textbf{mancheIdx}.
+	\item \textbf{Sommatore a 4 bit}: 1
+
+	      \noindent Utilizzato per sommare 2 numeri e fornire in output un numero a 4 bit.
+	      La sua funzione è modificare il valore di \textbf{vangaggio}.
 	\item \textbf{And}: 2
-	      Utilizzati per verificare se due condizioni sono vere allo stesso tempo. Si trovano nel componente \textbf{Partita} del Data-path.
-	\item \textbf{Maggiore uguale da 5 bit}: 1
-	      Utilizzato per confrontare il valore di \textbf{mancheIdx} e \textbf{maxManche}.
-	\item \textbf{Maggiore uguale da 4 bit}: 5
-	      Utilizzati per comparare il valore di \textbf{Vantaggio} con alcune \textbf{Costanti}.
+
+	      \noindent Utilizzati per verificare se due condizioni sono vere allo stesso tempo. Si trovano nel componente \textbf{partita} del Datapath.
+	\item \textbf{Maggiore uguale da 5 bit}: 2
+
+	      \noindent Utilizzati rispettivamente per confrontare il valore di \textbf{mancheIdx} e \textbf{maxManche},
+	      e per controllare se il valore di \textbf{mancheIdx} è maggiore o uguale a \( 4 \).
+	\item \textbf{Maggiore uguale da 4 bit}: 4
+
+	      \noindent Utilizzati per comparare il valore di \textbf{vangaggio} con alcune \textbf{Costanti}. Questo
+	      componente è stato progettato per tenere in considerazione la codifica in complemento a 2 di \textbf{vangaggio}.
+	\item \textbf{Concatenatore a 2 ingressi da 2 bit con uscita a 5 bit}: 1
+
+	      \noindent Utilizzato per concatenare il valore di \textbf{primo} e \textbf{secondo} in modo da poter
+	      avere un unico valore a 5 bit per poter calcolare \textbf{maxManche}.
+	\item \textbf{Concatenatore a 2 ingressi da 1 bit con uscita a 2 bit}: 2
+
+	      \noindent Utilizzati per concatenare i valori di controllo per determinare il vincitore della partita.
 \end{itemize}
+
+\noindent Nella figura \ref{fig:datapath} è rappresentato il Datapath del circuito.
 
 \begin{figure}[H]
 	\centering
@@ -503,7 +608,23 @@ Le componenti che abbiamo utilizzato per l'elaborazione del nostro circuito sono
 		% ------------------
 	\end{circuitikz}
 	\caption{Architettura del datapath}
+	\label{fig:datapath}
 \end{figure}
+
+\noindent Per una maggiore leggibilità del circuito è stata modellata una parte all'interno del componente \textbf{Partita} che
+riceve in input:
+\begin{itemize}
+	\item vantaggio;
+	\item mancheIdx;
+	\item maxManche;
+	\item inizia;
+\end{itemize}
+e fornisce in output:
+\begin{itemize}
+	\item partita.
+\end{itemize}
+
+\noindent Nella figura \ref{fig:partita} è rappresentato il componente \textbf{Partita}.
 
 \begin{figure}[H]
 	\centering
@@ -521,8 +642,11 @@ Le componenti che abbiamo utilizzato per l'elaborazione del nostro circuito sono
 		\draw[-latex] (partita.south) -- ++(0,-1) node[below] {partita};
 
 	\end{circuitikz}
-  \caption{Componente Partita}
+	\caption{Componente Partita}
+	\label{fig:partita}
 \end{figure}
+
+\noindent Nella figura \ref{fig:partita_datapath} è rappresentato il datapath del componente \textbf{Partita}.
 
 \begin{figure}[H]
 	\centering
@@ -668,14 +792,113 @@ Le componenti che abbiamo utilizzato per l'elaborazione del nostro circuito sono
 		% ------------------
 	\end{circuitikz}
 	\caption{Architettura del componente Partita}
+	\label{fig:partita_datapath}
 \end{figure}
 
 \section{Simulazioni}
 
-Gli ingressi sono: \textbf{Primo1, Primo0, Secondo1, Secondo0, Inizia}.
-Le uscite sono: \textbf{Manche1, Manche0, Partita1, Partita0}.
+Gli ingressi sono: \textbf{primo[1], primo[0], secondo[1], secondo[0], inizia}.\\
+Le uscite sono: \textbf{manche[1], manche[0], partita[1], partita[0]}.
 
-Abbiamo svolto una singola simulazione prendendo in considerazione \textbf{Quattro Partite}, ogniuna con un diverso numero di \textbf{Manche massime} e di svolgimento delle manche stesse.
+\noindent Abbiamo svolto una singola simulazione prendendo in considerazione \textbf{Quattro Partite},
+ognuna con un diverso numero di \textbf{Manche massime} e di svolgimento delle manche stesse. Questa
+simulazione è stata generata dal testbench in verilog in modo da verificare che gli output fossero identici
+tra il modello in verilog e quello in sis.
+
+\begin{figure}[H]
+	\centering
+	\begin{minipage}{\linewidth}
+		\centering
+		\begin{minipage}{0.45\linewidth}
+			\textbf{testbench.script}:
+			\begin{lstlisting}[language=bash]
+
+        read_blif FSMD.blif
+        simulate 0 0 1 0 1
+        simulate 0 1 1 0 0
+        simulate 1 1 1 0 0
+        simulate 0 1 1 1 0
+        simulate 1 1 1 1 0
+        simulate 1 1 1 0 0
+        simulate 0 1 1 0 0
+        simulate 1 1 1 1 0
+        simulate 0 0 0 1 1
+        simulate 0 1 1 1 0
+        simulate 1 0 0 1 0
+        simulate 0 1 1 0 0
+        simulate 1 0 1 1 0
+        simulate 1 1 0 1 0
+        simulate 1 1 1 1 1
+        simulate 0 1 1 1 0
+        simulate 1 0 0 1 0
+        simulate 1 1 1 0 0
+        simulate 1 1 0 1 0
+        simulate 0 1 1 0 0
+        simulate 0 1 0 1 1
+        simulate 0 1 1 1 0
+        simulate 1 0 0 1 0
+        simulate 1 1 0 1 0
+        simulate 1 0 1 0 0
+        simulate 1 1 0 1 0
+        simulate 0 1 1 1 0
+        simulate 0 1 1 0 0
+        simulate 0 0 1 1 0
+        simulate 0 1 1 1 0
+        simulate 1 1 1 1 0
+        simulate 1 0 0 1 0
+        quit
+      \end{lstlisting}
+		\end{minipage}
+		\hspace{0.05\linewidth}
+		\begin{minipage}{0.45\linewidth}
+			\textbf{output\_sis.txt}:
+			\begin{lstlisting}[language=sh]
+
+
+        Outputs: 0 0 0 0
+        Outputs: 1 0 0 0
+        Outputs: 0 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 1 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 1 0 0 0
+        Outputs: 1 1 1 1
+        Outputs: 0 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 1 0 0 0
+        Outputs: 1 0 0 0
+        Outputs: 1 0 1 0
+        Outputs: 0 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 0 0 0
+        Outputs: 1 0 0 1
+        Outputs: 0 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 1 0 0 0
+        Outputs: 1 1 0 0
+        Outputs: 1 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 0 0 0
+        Outputs: 0 0 0 0
+        Outputs: 0 0 0 0
+        Outputs: 1 1 0 0
+        Outputs: 0 1 0 1
+
+      \end{lstlisting}
+		\end{minipage}
+	\end{minipage}
+\end{figure}
+\noindent Sono state simulate 4 partite con le seguenti caratteristiche:
+\begin{enumerate}
+	\item Partita da 6 manche finita in pareggio;
+	\item Partita da 5 manche vinta dal giocatore 2 con vantaggio \( -1 \);
+	\item Partita da 19 manche vinta dal giocatore 1 con vantaggio \( +2 \);
+	\item Partita da 9 manche vinta dal giocatore 1 con vantaggio \( +2 \);
+\end{enumerate}
 
 \section{Statistiche del circuito}
 Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
@@ -707,8 +930,26 @@ Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labor
 
 
 \section{Scelte progettuali}
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
+\subsection{FSM}
+Nello sviluppo di questo circuito abbiamo pensato di implementare il calcolo della manche all'interno della
+FSM in modo da avere un circuito più semplice e con meno componenti, risparmiandoci così di memorizzare il
+vincitore della manche precedente e la mossa che ha usato per vincere.
 
+\subsection{Datapath}
+\subsubsection{Concatenatori}
+I componenti dei concatenatori sono stati inseriti nel datapath a scopo puramente illustrativo, in quanto
+non sono stati utilizzati per la realizzazione del circuito siccome in sis è possibile gestire i bit singolarmente
+e quindi inserirli direttamente nei componenti che li utilizzano nell'ordine desiderato. In verilog, invece,
+è possibile utilizzare l'operatore di concatenazione.
 
+\subsubsection{Componenti riutilizzati}
+Per la realizzazione del datapath abbiamo cercato di riutilizzare i componenti già realizzati per il circuito
+evitando di crearne di nuovi, ad esempio abbiamo utilizzato solo il componente \textbf{Maggiore Uguale} per 
+tutti i controlli necessari all'interno del componente \textbf{Partita}.
+
+\noindent Per quanto riguarda il resto dei componenti abbiamo dovuto crearne di nuovi in quanto il numero di
+bit del registro \textbf{vantaggio} e il numero di bit dei registri \textbf{mancheIdx} e \textbf{maxManche}
+sono diversi. Avremmo potuto considerare \textbf{vantaggio} da 5 bit per poter riutilizzare componenti già presenti,
+ma abbiamo preferito ottimizzare il circuito scegliendo il minor numero di bit necessari per ogni componente.
 
 \end{document}
