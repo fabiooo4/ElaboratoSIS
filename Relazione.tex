@@ -1,6 +1,15 @@
 \documentclass[a4paper]{article}
 \usepackage[italian]{babel}
 \usepackage{float}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{shapes, automata, positioning}
+\usepackage{circuitikz}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=false,
+}
 
 \begin{document}
 \input{title.tex}
@@ -57,10 +66,37 @@ Il circuito ha \textbf{due uscite}:
 	      \end{itemize}
 \end{itemize}
 \section{Architettura generale}
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			\draw (0,0) rectangle (2,2) node[pos=.5] {FSM};
+			\draw[latex-] (0.25,2) -- ++(0,1) node[above, align=center, scale=0.8] {primo};
+			\draw[latex-] (1,2) -- ++(0,1.5) node[above, align=center, scale=0.8] {secondo};
+			\draw[latex-] (1.75,2) -- ++(0,1) node[above, align=center, scale=0.8] {inizia};
+
+			\draw[-latex] (1,0) -- ++(0,-1) node[below, align=center, scale=0.8] {manche};
+
+
+			\draw (4,0) rectangle (6,2) node[pos=.5] {Datapath};
+			\draw[latex-] (4.25,2) -- ++(0,1) node[above, align=center, scale=0.8, yshift=-2] {primo};
+			\draw[latex-] (5,2) -- ++(0,1.5) node[above, align=center, scale=0.8] {secondo};
+			\draw[latex-] (5.75,2) -- ++(0,1) node[above, align=center, scale=0.8] {inizia};
+
+			\draw[-latex] (5,0) -- ++(0,-1) node[below, align=center, scale=0.8] {partita};
+
+			\draw[latex-] (4,1) -- (2,1) node[pos=.5, above, align=center, scale=0.8] {manche};
+
+			\draw[latex-] (0,0.5) -- ++(-0.5,0) -- ++(0,-1) -- ++(-1,0) node[left, align=center, scale=0.8] {CLK};
+			\draw[fill] (-0.5,-0.5) circle (0.05);
+			\draw[-latex] (-0.5,-0.5) -- (4.5, -0.5) -- ++(0,0.5);
+
+		\end{tikzpicture}
+	\end{center}
+	\caption{Architettura generale della FSMD}
+\end{figure}
 Il circuito è costituito da FSM (Controllore) e Data-path (elaboratore). I due file che racchiudono la rappresentazione di tali componenti sono presenti nella cartella SIS.
 Sono presenti entrambi in modo che il circuito sia completo e possa funzionare.
 
-Di seguito vengono riportati tutti i componenti utilizzati per la realizzazione di questo circuito:
 \section{Diagramma degli stati del controllore}
 È riportato di seguito il diagramma degli stati del controllore rappresentato in tabella di mealy
 con gli ingressi codificati nel seguente modo:
@@ -83,36 +119,138 @@ e gli stati codificati come:
 Dato l'elevato numero di ingressi nella seguente tabella è stato deciso di mettere in riga gli stati e in
 colonna gli ingressi per una migliore leggibilità.
 \begin{table}[H]
-	\begin{center}
+	\centering
+	{\renewcommand{\arraystretch}{2}%
 		\begin{tabular}{l|c|c|c|c|c|c|c}
-			   & Par    & PrS    & PrC    & PrF    & SeS    & SeC    & SeF    \\
+			                   & Par    & PrS    & PrC    & PrF    & SeS    & SeC    & SeF    \\
 			\hline
-			N- & Par/00 & PrS/00 & PrC/00 & PrF/00 & SeS/00 & SeC/00 & SeF/00 \\
+			- -\hspace{0.5mm}1 & Par/00 & Par/00 & Par/00 & Par/00 & Par/00 & Par/00 & Par/00 \\
 			\hline
-			-N & Par/00 & PrS/00 & PrC/00 & PrF/00 & SeS/00 & SeC/00 & SeF/00 \\
+			N-\hspace{0.5mm}0  & Par/00 & PrS/00 & PrC/00 & PrF/00 & SeS/00 & SeC/00 & SeF/00 \\
 			\hline
-			SS & Par/11 & PrS/00 & Par/11 & Par/11 & SeS/00 & Par/11 & Par/11 \\
+			-N\hspace{0.5mm}0  & Par/00 & PrS/00 & PrC/00 & PrF/00 & SeS/00 & SeC/00 & SeF/00 \\
 			\hline
-			SC & SeC/10 & PrS/00 & SeC/10 & SeC/10 & SeC/10 & SeC/00 & SeC/10 \\
+			SS\hspace{0.5mm}0  & Par/11 & PrS/00 & Par/11 & Par/11 & SeS/00 & Par/11 & Par/11 \\
 			\hline
-			SF & PrS/01 & PrS/00 & PrS/01 & PrS/01 & PrS/01 & Prs/01 & SeF/00 \\
+			SC\hspace{0.5mm}0  & SeC/10 & PrS/00 & SeC/10 & SeC/10 & SeC/10 & SeC/00 & SeC/10 \\
 			\hline
-			CS & PrC/01 & PrC/01 & PrC/00 & PrC/01 & SeS/00 & PrC/01 & PrC/01 \\
+			SF\hspace{0.5mm}0  & PrS/01 & PrS/00 & PrS/01 & PrS/01 & PrS/01 & Prs/01 & SeF/00 \\
 			\hline
-			CC & Par/11 & Par/11 & PrC/00 & Par/11 & Par/11 & SeC/00 & Par/11 \\
+			CS\hspace{0.5mm}0  & PrC/01 & PrC/01 & PrC/00 & PrC/01 & SeS/00 & PrC/01 & PrC/01 \\
 			\hline
-			CF & SeF/10 & SeF/10 & PrC/00 & SeF/10 & SeF/10 & SeF/10 & SeF/00 \\
+			CC\hspace{0.0mm}0  & Par/11 & Par/11 & PrC/00 & Par/11 & Par/11 & SeC/00 & Par/11 \\
 			\hline
-			FS & SeS/10 & SeS/10 & SeS/10 & PrF/00 & SeS/00 & SeS/10 & SeS/10 \\
+			CF\hspace{0.2mm}0  & SeF/10 & SeF/10 & PrC/00 & SeF/10 & SeF/10 & SeF/10 & SeF/00 \\
 			\hline
-			FC & PrF/01 & PrF/01 & PrF/01 & PrF/00 & PrF/01 & SeC/00 & PrF/01 \\
+			FS\hspace{0.5mm}0  & SeS/10 & SeS/10 & SeS/10 & PrF/00 & SeS/00 & SeS/10 & SeS/10 \\
 			\hline
-			FF & Par/11 & Par/11 & Par/11 & PrF/00 & Par/11 & Par/11 & SeF/00 \\
+			FC\hspace{0.3mm}0  & PrF/01 & PrF/01 & PrF/01 & PrF/00 & PrF/01 & SeC/00 & PrF/01 \\
 			\hline
-		\end{tabular}
-	\end{center}
-	\caption{Diagramma degli stati del controllore}
+			FF\hspace{0.5mm}0  & Par/11 & Par/11 & Par/11 & PrF/00 & Par/11 & Par/11 & SeF/00 \\
+		\end{tabular}}
+	\caption{State Transition Table del controllore (Mealy)}
 \end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[shorten >=1pt,node distance=3.7cm,auto]
+		\tikzstyle{every state}=[fill={rgb:black,1;white,10}]
+
+		\node[state] (Par)                {$Par$};
+		\node (L)   [left of=Par]  {};
+		\node (R)   [right of=Par] {};
+		\node[state] (PrS) [above of=L]   {$PrS$};
+		\node[state] (PrC) [above of=Par] {$PrC$};
+		\node[state] (PrF) [above of=R]   {$PrF$};
+		\node[state] (SeS) [below of=L]   {$SeS$};
+		\node[state] (SeC) [below of=Par] {$SeC$};
+		\node[state] (SeF) [below of=R]   {$SeF$};
+		\node at (PrS) [xshift=-1.35cm, yshift=1.3cm,align=center,scale=0.7] (prs1) { $\stackrel{\text{CS0/01}}{\text{PrC}}$};
+		\node at (PrS) [xshift=-0.45cm, yshift=1.3cm,align=center,scale=0.7] (prs2) { $\stackrel{\text{FC0/01}}{\text{PrF}}$};
+		\node at (PrS) [xshift=0.45cm, yshift=1.3cm,align=center,scale=0.7] (prs3) { $\stackrel{\text{FS/10}}{\text{SeS}}$};
+		\node at (PrS) [xshift=1.35cm, yshift=1.3cm,align=center,scale=0.7] (prs4) { $\stackrel{\text{CF0/10}}{\text{SeF}}$};
+		\node at (PrC) [xshift=-1.35cm, yshift=1.3cm,align=center,scale=0.7] (prc1) { $\stackrel{\text{SF0/01}}{\text{PrS}}$};
+		\node at (PrC) [xshift=-0.45cm, yshift=1.3cm,align=center,scale=0.7] (prc2) { $\stackrel{\text{FC0/01}}{\text{PrF}}$};
+		\node at (PrC) [xshift=0.45cm, yshift=1.3cm,align=center,scale=0.7] (prc3) { $\stackrel{\text{FS0/10}}{\text{SeS}}$};
+		\node at (PrC) [xshift=1.35cm, yshift=1.3cm,align=center,scale=0.7] (prc4) { $\stackrel{\text{SC0/10}}{\text{SeC}}$};
+		\node at (PrF) [xshift=-1.35cm, yshift=1.3cm,align=center,scale=0.7] (prf1) { $\stackrel{\text{SF0/01}}{\text{PrS}}$};
+		\node at (PrF) [xshift=-0.45cm, yshift=1.3cm,align=center,scale=0.7] (prf2) { $\stackrel{\text{CS0/01}}{\text{PrC}}$};
+		\node at (PrF) [xshift=0.45cm, yshift=1.3cm,align=center,scale=0.7] (prf3) { $\stackrel{\text{SC0/10}}{\text{SeC}}$};
+		\node at (PrF) [xshift=1.35cm, yshift=1.3cm,align=center,scale=0.7] (prf4) { $\stackrel{\text{CF0/10}}{\text{SeF}}$};
+		\node at (SeS) [xshift=-1.35cm, yshift=-1.3cm,align=center,scale=0.7] (ses1) { $\underset{\text{SC0/10}}{\text{SeC}}$};
+		\node at (SeS) [xshift=-0.45cm, yshift=-1.3cm,align=center,scale=0.7] (ses2) { $\underset{\text{CF0/10}}{\text{SeF}}$};
+		\node at (SeS) [xshift=0.45cm, yshift=-1.3cm,align=center,scale=0.7] (ses3) { $\underset{\text{SF0/01}}{\text{PrS}}$};
+		\node at (SeS) [xshift=1.35cm, yshift=-1.3cm,align=center,scale=0.7] (ses4) { $\underset{\text{FC0/01}}{\text{PrF}}$};
+		\node at (SeC) [xshift=-1.35cm, yshift=-1.3cm,align=center,scale=0.7] (sec1) { $\underset{\text{FS0/10}}{\text{SeS}}$};
+		\node at (SeC) [xshift=-0.45cm, yshift=-1.3cm,align=center,scale=0.7] (sec2) { $\underset{\text{CF0/10}}{\text{SeF}}$};
+		\node at (SeC) [xshift=0.45cm, yshift=-1.3cm,align=center,scale=0.7] (sec3) { $\underset{\text{SF0/01}}{\text{PrS}}$};
+		\node at (SeC) [xshift=1.35cm, yshift=-1.3cm,align=center,scale=0.7] (sec4) { $\underset{\text{CS0/01}}{\text{PrC}}$};
+		\node at (SeF) [xshift=-1.35cm, yshift=-1.3cm,align=center,scale=0.7] (sef1) { $\underset{\text{FS0/10}}{\text{SeS}}$};
+		\node at (SeF) [xshift=-0.45cm, yshift=-1.3cm,align=center,scale=0.7] (sef2) { $\underset{\text{SC0/10}}{\text{SeC}}$};
+		\node at (SeF) [xshift=0.45cm, yshift=-1.3cm,align=center,scale=0.7] (sef3) { $\underset{\text{CS0/01}}{\text{PrC}}$};
+		\node at (SeF) [xshift=1.35cm, yshift=-1.3cm,align=center,scale=0.7] (sef4) { $\underset{\text{FC0/01}}{\text{PrF}}$};
+
+		\path[->]
+		(Par) edge [loop left] node[scale=0.6, align=center] {N-0/00\\-N0/00\\--1/00} (   )
+		edge [loop right] node[scale=0.6, align=center] {SS0/11\\CC0/11\\FF0/11} (   );
+		\path[->]
+		(Par) edge [bend left=10] node[scale=0.6, align=center] {SF0/01} (PrS)
+		(PrS) edge [loop left] node[scale=0.6, align=center] {S-0/00\\N-0/00\\-N0/00} (   )
+		(PrS) edge [bend left=10] node[scale=0.6, align=center, xshift=-6] {CC0/11\\FF0/11\\--1/00} (Par);
+		\path[->]
+		(Par) edge [bend left=10] node[scale=0.6, align=center, xshift=2] {CS0/01} (PrC)
+		(PrC) edge [loop left] node[scale=0.6, align=center] {C-0/00\\N-0/00\\-N0/00} (   )
+		(PrC) edge [bend left=10] node[scale=0.6, align=center, yshift=30] {SS0/11\\FF0/11\\--1/00} (Par);
+		\path[->]
+		(Par) edge [bend left=10] node[scale=0.6, align=center, yshift=30, xshift=35] {FC0/01} (PrF)
+		(PrF) edge [loop right] node[scale=0.6, align=center] {F-0/00\\N-0/00\\-N0/00} (   )
+		(PrF) edge [bend left=10] node[scale=0.6, align=center] {SS0/11\\CC0/11\\--1/00} (Par);
+		\path[->]
+		(Par) edge [bend left=10] node[scale=0.6, align=center, yshift=-20, xshift=-22] {FS0/10} (SeS)
+		(SeS) edge [loop left] node[scale=0.6, align=center] {S-0/00\\N-0/00\\-N0/00} (   )
+		(SeS) edge [bend left=10] node[scale=0.6, align=center] {CC0/11\\FF0/11\\--1/00} (Par);
+		\path[->]
+		(Par) edge [bend left=10] node[scale=0.6, align=center] {SC0/10} (SeC)
+		(SeC) edge [loop left] node[scale=0.6, align=center] {C-0/00\\N-0/00\\-N0/00} (   )
+		(SeC) edge [bend left=10] node[scale=0.6, align=center, yshift=-15] {SS0/11\\FF0/11\\--1/00} (Par);
+		\path[->]
+		(Par) edge [bend left=10] node[scale=0.6, align=center] {CF0/10} (SeF)
+		(SeF) edge [loop right] node[scale=0.6, align=center] {F-0/00\\N-0/00\\-N0/00} (   )
+		(SeF) edge [bend left=10] node[scale=0.6, align=center, yshift=-12, xshift=20] {SS0/11\\CC0/11\\--1/00} (Par);
+
+		\path[->]
+		(PrS) edge [] node[scale=0.7, align=center] {} (prs1)
+    (PrS) edge [] node[scale=0.7, align=center] {} (prs2)
+    (PrS) edge [] node[scale=0.7, align=center] {} (prs3)
+    (PrS) edge [] node[scale=0.7, align=center] {} (prs4);
+    \path[->]
+    (PrC) edge [] node[scale=0.7, align=center] {} (prc1)
+    (PrC) edge [] node[scale=0.7, align=center] {} (prc2)
+    (PrC) edge [] node[scale=0.7, align=center] {} (prc3)
+    (PrC) edge [] node[scale=0.7, align=center] {} (prc4);
+    \path[->]
+    (PrF) edge [] node[scale=0.7, align=center] {} (prf1)
+    (PrF) edge [] node[scale=0.7, align=center] {} (prf2)
+    (PrF) edge [] node[scale=0.7, align=center] {} (prf3)
+    (PrF) edge [] node[scale=0.7, align=center] {} (prf4);
+    \path[->]
+    (SeS) edge [] node[scale=0.7, align=center] {} (ses1)
+    (SeS) edge [] node[scale=0.7, align=center] {} (ses2)
+    (SeS) edge [] node[scale=0.7, align=center] {} (ses3)
+    (SeS) edge [] node[scale=0.7, align=center] {} (ses4);
+    \path[->]
+    (SeC) edge [] node[scale=0.7, align=center] {} (sec1)
+    (SeC) edge [] node[scale=0.7, align=center] {} (sec2)
+    (SeC) edge [] node[scale=0.7, align=center] {} (sec3)
+    (SeC) edge [] node[scale=0.7, align=center] {} (sec4);
+    \path[->]
+    (SeF) edge [] node[scale=0.7, align=center] {} (sef1)
+    (SeF) edge [] node[scale=0.7, align=center] {} (sef2)
+    (SeF) edge [] node[scale=0.7, align=center] {} (sef3)
+    (SeF) edge [] node[scale=0.7, align=center] {} (sef4);
+	\end{tikzpicture}
+  \caption{State Transition Graph del controllore}
+\end{figure}
 
 
 \section{Architettura del datapath}
@@ -144,6 +282,393 @@ Le componenti che abbiamo utilizzato per l'elaborazione del nostro circuito sono
 	\item \textbf{Maggiore uguale da 4 bit}: 5
 	      Utilizzati per comparare il valore di \textbf{Vantaggio} con alcune \textbf{Costanti}.
 \end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[square/.style={regular polygon,regular polygon sides=4}]
+		% Multiplexer 2 to 1
+		\draw (-1.4,-1) node (1mux2-0) {0};
+		\draw (-0.9,-1) node (1mux2-1) {1};
+		\draw (-1.4,-0.8) node (1mux2-i0) {};
+		\draw (-0.9,-0.8) node (1mux2-i1) {};
+		\draw (-0.6,-1) node (1mux2-s) {};
+		\draw (-1.15,-1.18) node (1mux2-o) {};
+		\draw (-1.9,-0.7) -- ++(1.5,0) -- ++(-0.25, -0.6) -- ++(-1,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Multiplexer2 2 to 1
+		\draw (-1.4,-5) node (2mux2-0) {0};
+		\draw (-0.9,-5) node (2mux2-1) {1};
+		\draw (-1.4,-4.8) node (2mux2-i0) {};
+		\draw (-0.9,-4.8) node (2mux2-i1) {};
+		\draw (-0.6,-5) node (2mux2-s) {};
+		\draw (-1.15,-5.18) node (2mux2-o) {};
+		\draw (-1.9,-4.7) -- ++(1.5,0) -- ++(-0.25, -0.6) -- ++(-1,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Multiplexer3 2 to 1
+		\draw (1.9,-5) node (3mux2-0) {0};
+		\draw (1.4,-5) node (3mux2-1) {1};
+		\draw (1.9,-4.8) node (3mux2-i0) {};
+		\draw (1.4,-4.8) node (3mux2-i1) {};
+		\draw (1.1,-5) node (3mux2-s) {};
+		\draw (1.65,-5.18) node (3mux2-o) {};
+		\draw (0.9,-4.7) -- ++(1.5,0) -- ++(-0.25, -0.6) -- ++(-1,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Multiplexer 4 to 1
+		\draw (-5.9,-1) node (1mux4-0) {00};
+		\draw (-5.2,-1) node (1mux4-1) {01};
+		\draw (-4.5,-1) node (1mux4-2) {10};
+		\draw (-3.8,-1) node (1mux4-3) {11};
+		\draw (-5.9,-0.8) node (1mux4-i0) {};
+		\draw (-5.2,-0.8) node (1mux4-i1) {};
+		\draw (-4.5,-0.8) node (1mux4-i2) {};
+		\draw (-3.8,-0.8) node (1mux4-i3) {};
+		\draw (-6.3,-1) node (1mux4-s) {};
+		\draw (-4.95,-1.18) node (1mux4-o) {};
+		\draw (-6.5,-0.7) -- ++(3.3,0) -- ++(-0.25, -0.6) -- ++(-2.8,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Multiplexer2 4 to 1
+		\draw (-5.9,-5) node (2mux4-0) {00};
+		\draw (-5.2,-5) node (2mux4-1) {01};
+		\draw (-4.5,-5) node (2mux4-2) {10};
+		\draw (-3.8,-5) node (2mux4-3) {11};
+		\draw (-5.9,-4.8) node (2mux4-i0) {};
+		\draw (-5.2,-4.8) node (2mux4-i1) {};
+		\draw (-4.5,-4.8) node (2mux4-i2) {};
+		\draw (-3.8,-4.8) node (2mux4-i3) {};
+		\draw (-6.3,-5) node (2mux4-s) {};
+		\draw (-4.95,-5.18) node (2mux4-o) {};
+		\draw (-6.5,-4.7) -- ++(3.3,0) -- ++(-0.25, -0.6) -- ++(-2.8,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Registri
+		% mancheIdx
+		\draw (-1.15,-2.5) node[rectangle ,draw, minimum width=2.3cm, minimum height=0.7cm, scale=0.7] (mancheIdx) {\hspace{0.5em}mancheIdx};
+		\draw (mancheIdx.west) -- ++(0.005,0) -- ++(0,0.15) -- ++(0.2, -0.15) -- ++(-0.2,-0.15);
+		\draw[latex-] (mancheIdx.west) -- ++(-0.5,0) node[above] {\tiny CLK};
+
+		% vantaggio
+		\draw (-1.15,-6.5) node[rectangle ,draw, minimum width=2.3cm, minimum height=0.7cm, scale=0.7] (vantaggio) {\hspace{0.5em}vantaggio};
+		\draw (vantaggio.west) -- ++(0.005,0) -- ++(0,0.15) -- ++(0.2, -0.15) -- ++(-0.2,-0.15);
+		\draw[latex-] (vantaggio.west) -- ++(-0.5,0) node[above] {\tiny CLK};
+
+		% maxManche
+		\draw (1.65,-6.5) node[rectangle ,draw, minimum width=2.5cm, minimum height=0.7cm, scale=0.7] (maxManche) {\hspace{-0.5em}maxManche};
+		\draw (maxManche.east) -- ++(-0.005,0) -- ++(0,0.15) -- ++(-0.2, -0.15) -- ++(0.2,-0.15);
+		\draw[latex-] (maxManche.east) -- ++(0.5,0) node[above] {\tiny CLK};
+		% ------------------
+
+		% Operatori
+		\draw (-2.9,-3.4) node[square,draw, minimum size=2cm, scale=0.6] (sum1) {\huge$+$};
+		\node[xshift=-5, yshift=-3] at (sum1.north) (sum1-i0) {};
+		\node[xshift=5, yshift=-3] at (sum1.north) (sum1-i1) {};
+
+		\draw (-2.9,-7.4) node[square,draw, minimum size=2cm, scale=0.6] (sum2) {\huge$+$};
+		\node[xshift=-5, yshift=-3] at (sum2.north) (sum2-i0) {};
+		\node[xshift=5, yshift=-3] at (sum2.north) (sum2-i1) {};
+
+		\draw (3.5,-7.4) node[square,draw, minimum size=2cm, scale=0.6] (sum3) {\huge$+$};
+		\node[xshift=-5, yshift=-3] at (sum3.north) (sum3-i0) {};
+		\node[xshift=5, yshift=-3] at (sum3.north) (sum3-i1) {};
+
+		\draw (3mux2-i1 |- 52,-3.5) node[square,draw, minimum size=2cm, scale=0.6] (sum4) {\huge$+$};
+		\node[xshift=-5, yshift=-3] at (sum4.north) (sum4-i0) {};
+		\node[xshift=5, yshift=-3] at (sum4.north) (sum4-i1) {};
+
+		\draw (sum4-i1 |- 52,-1.5) node[square,draw, minimum size=2cm, scale=0.6] (conc) {\huge$C$};
+		\node[xshift=-5, yshift=-3] at (conc.north) (conc-i0) {};
+		\node[xshift=5, yshift=-3] at (conc.north) (conc-i1) {};
+		% ------------------
+
+		% Componenti
+		\draw (0.3,-8.5) node[rectangle ,draw, minimum width=2.5cm, minimum height=1cm, scale=0.7] (partita) {Partita};
+		\node[xshift=-15, yshift=-3] at (partita.north) (partita-i0) {};
+		\node[xshift=-5, yshift=-3] at (partita.north) (partita-i1) {};
+		\node[xshift=5, yshift=-3] at (partita.north) (partita-i2) {};
+		\node[xshift=15, yshift=-3] at (partita.north) (partita-i3) {};
+		% ------------------
+
+		% inizia
+		\draw[-latex] (0.3,0) node[above] (inizia) {\scriptsize inizia} -- ++(0,-1) -- (1mux2-s);
+		\draw[fill] (0.3,-1) circle (0.03);
+		\draw[-latex] (0.3,-1) -- ++(0,-1) |- (2mux2-s);
+		\draw[fill] (0.3,52 |- 2mux2-s) circle (0.03);
+		\draw[-latex] (0.3,52 |- 3mux2-s) -- (3mux2-s);
+
+		% primo
+		\draw[-latex] (1.2,0) node[above, yshift=-1.5] (inizia) {\scriptsize primo} -- ++(0,-0.8) -| (conc-i0);
+
+		% secondo
+		\draw[-latex] (1.93,0) node[above, xshift=8] (inizia) {\scriptsize secondo} -- ++(0,-0.8) -| (conc-i1);
+
+		% manche
+		\draw[latex-] (1mux4-s) -- ++(-1,0) node[below, yshift=-1, xshift=-5] (manche) {\scriptsize manche};
+		\draw[latex-] (2mux4-s) -- ++(-0.5,0) -- (-6.8, 52 |- 1mux4-s);
+		\draw[fill] (-6.8, 52 |- 1mux4-s) circle (0.03);
+
+		% mancheIdx
+		\draw[latex-] (1mux2-i1) -- ++(0,0.5) node[above] {\tiny 00000};
+		\draw[-latex] (1mux2-o) -- (mancheIdx.north);
+		\draw[-latex] (mancheIdx.south) -- ++(0,-0.5) |- (sum1.east);
+		\draw[-latex] (sum1.north) -- ++(0,2.7) -| (1mux2-i0);
+		\draw[-latex] (1mux4-o) |- (sum1.west);
+
+		\draw[latex-] (1mux4-i0) -- ++(0,0.5) node[above] {\tiny 00000};
+		\draw[latex-] (1mux4-i1) -- ++(0,0.5) node[above] {\tiny 00001};
+		\draw[latex-] (1mux4-i2) -- ++(0,0.5) node[above] {\tiny 00001};
+		\draw[latex-] (1mux4-i3) -- ++(0,0.5) node[above] {\tiny 00001};
+
+		% vantaggio
+		\draw[latex-] (2mux2-i1) -- ++(0,0.5) node[above] {\tiny 0000};
+		\draw[-latex] (2mux2-o) -- (vantaggio.north);
+		\draw[-latex] (vantaggio.south) -- ++(0,-0.5) |- (sum2.east);
+		\draw[-latex] (sum2.north) -- ++(0,2.7) -| (2mux2-i0);
+		\draw[-latex] (2mux4-o) |- (sum2.west);
+
+		\draw[latex-] (2mux4-i0) -- ++(0,0.5) node[above] {\tiny 0000};
+		\draw[latex-] (2mux4-i1) -- ++(0,0.5) node[above] {\tiny 0001};
+		\draw[latex-] (2mux4-i2) -- ++(0,0.5) node[above] {\tiny 1111};
+		\draw[latex-] (2mux4-i3) -- ++(0,0.5) node[above] {\tiny 0000};
+
+		% maxManche
+		\draw[-latex] (3mux2-o) -- (maxManche.north);
+		\draw[-latex] (maxManche.south) -- ++(0,-0.5) |- (sum3.west);
+		\draw[-latex] (sum3.north) -- ++(0,2.7) -| (3mux2-i0);
+
+		\draw[-latex] (sum4.south) -- (3mux2-i1);
+		\draw[latex-] (sum4-i0) -- ++(0,0.5) node[above, xshift=-2] {\tiny 00100};
+		\draw[-latex] (conc.south) -- (sum4-i1);
+
+		% partita
+		\draw[latex-] (partita-i0) -- ++(0,2.5) -- ++(-0.93,0);
+		\draw[fill] (-1.15, -5.75) circle (0.03);
+		\draw[latex-] (partita-i1) -- ++(0,6.5) -- ++(-1.28,0);
+		\draw[fill] (-1.15, -1.75) circle (0.03);
+		\draw[latex-] (partita-i2) -- ++(0,2.5) -- ++(1.18,0);
+		\draw[fill] (1.65, -5.75) circle (0.03);
+		\draw[-latex] (0.3,52 |- 3mux2-s) -- ++(0,-2) -| (partita-i3);
+		\draw[-latex] (partita.south) -- ++(0,-0.6) node[below] {\scriptsize partita};
+
+		% Numero di bit
+		% inizia
+		\draw (0.2, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+
+		% primo
+		\draw (1.1, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 2};
+
+		% secondo
+		\draw (1.83, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 2};
+
+		% concatenatore
+		\draw (1.48, -2.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+
+		% manche
+		\draw (-7.2, -1.1) -- ++(0.2, 0.2) node[above, yshift=-1, xshift=-2] {\tiny 2};
+
+		% mancheIdx
+		% 1mux2
+		\draw (-1.25, -1.6) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+		% reg
+		\draw (-1.25, -3.1) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+		% sum
+		\draw (-3, -2.8) -- ++(0.2, 0.2) node[left, yshift=-2, xshift=-3] {\tiny 5};
+		% 1mux4
+		\draw (-5.05, -1.6) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+
+		% maxManche
+		% sum
+		\draw (1.3, -4.3) -- ++(0.2, 0.2) node[left, yshift=-2, xshift=-3] {\tiny 5};
+		% 3mux2
+		\draw (1.55, -5.6) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+		% reg
+		\draw (1.55, -7.1) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+		% sum
+		\draw (3.4, -6.8) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+
+		% vantaggio
+		% 2mux2
+		\draw (-1.25, -5.6) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 4};
+		% reg
+		\draw (-1.25, -7.1) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 4};
+		% sum
+		\draw (-3, -6.8) -- ++(0.2, 0.2) node[left, yshift=-2, xshift=-3] {\tiny 4};
+		% 2mux4
+		\draw (-5.05, -5.6) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 4};
+
+		% partita
+		\draw (0.2, -9.15) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 2};
+		% ------------------
+	\end{circuitikz}
+	\caption{Architettura del datapath}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[square/.style={regular polygon,regular polygon sides=4}]
+		\draw (0,0) node[rectangle ,draw, minimum width=2.5cm, minimum height=1cm, scale=1.6] (partita) {Partita};
+		\node[xshift=-40, yshift=-3] at (partita.north) (partita-i0) {};
+		\node[xshift=-15, yshift=-3] at (partita.north) (partita-i1) {};
+		\node[xshift=15, yshift=-3] at (partita.north) (partita-i2) {};
+		\node[xshift=40, yshift=-3] at (partita.north) (partita-i3) {};
+
+		\draw[latex-] (partita-i0) -- ++(0,2) node[above] {vantaggio};
+		\draw[latex-] (partita-i1) -- ++(0,1.5) node[above, xshift=3] {mancheIdx};
+		\draw[latex-] (partita-i2) -- ++(0,1) node[above] {maxManche};
+		\draw[latex-] (partita-i3) -- ++(0,0.5) node[above] {inizia};
+		\draw[-latex] (partita.south) -- ++(0,-1) node[below] {partita};
+
+	\end{circuitikz}
+  \caption{Componente Partita}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[square/.style={regular polygon,regular polygon sides=4}]
+		% Multiplexer 2 to 1
+		\draw (3,-8) node (1mux2-0) {0};
+		\draw (2.5,-8) node (1mux2-1) {1};
+		\draw (3,-7.8) node (1mux2-i0) {};
+		\draw (2.5,-7.8) node (1mux2-i1) {};
+		\draw (3.3,-8) node (1mux2-s) {};
+		\draw (2.75,-8.18) node (1mux2-o) {};
+		\draw (2,-7.7) -- ++(1.5,0) -- ++(-0.25, -0.6) -- ++(-1,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Multiplexer2 2 to 1
+		\draw (2.75,-9.5) node (2mux2-1) {0};
+		\draw (3.25,-9.5) node (2mux2-0) {1};
+		\draw (2.75,-9.3) node (2mux2-i0) {};
+		\draw (3.25,-9.3) node (2mux2-i1) {};
+		\draw (3.55,-9.5) node (2mux2-s) {};
+		\draw (3,-9.68) node (2mux2-o) {};
+		\draw (2.25,-9.2) -- ++(1.5,0) -- ++(-0.25, -0.6) -- ++(-1,0) -- ++(-0.25,0.6) -- cycle;
+		% ------------------
+
+		% Operatori
+		\draw (-0.7,-2.5) node[square,draw, minimum size=2cm, scale=0.6] (gt1) {\huge$\ge$};
+		\node[xshift=-5, yshift=-3] at (gt1.north) (gt1-i0) {};
+		\node[xshift=5, yshift=-3] at (gt1.north) (gt1-i1) {};
+
+		\draw (0.7,-2.5) node[square,draw, minimum size=2cm, scale=0.6] (gt2) {\huge$\ge$};
+		\node[xshift=-5, yshift=-3] at (gt2.north) (gt2-i0) {};
+		\node[xshift=5, yshift=-3] at (gt2.north) (gt2-i1) {};
+
+		\draw (2.1,-2.5) node[square,draw, minimum size=2cm, scale=0.6] (gt3) {\huge$\ge$};
+		\node[xshift=-5, yshift=-3] at (gt3.north) (gt3-i0) {};
+		\node[xshift=5, yshift=-3] at (gt3.north) (gt3-i1) {};
+
+		\draw (3.5,-2.5) node[square,draw, minimum size=2cm, scale=0.6] (gt4) {\huge$\ge$};
+		\node[xshift=-5, yshift=-3] at (gt4.north) (gt4-i0) {};
+		\node[xshift=5, yshift=-3] at (gt4.north) (gt4-i1) {};
+
+		\draw (4.9,-2.5) node[square,draw, minimum size=2cm, scale=0.6] (gt5) {\huge$\ge$};
+		\node[xshift=-5, yshift=-3] at (gt5.north) (gt5-i0) {};
+		\node[xshift=5, yshift=-3] at (gt5.north) (gt5-i1) {};
+
+		\draw (6.3,-2.5) node[square,draw, minimum size=2cm, scale=0.6] (gt6) {\huge$\ge$};
+		\node[xshift=-5, yshift=-3] at (gt6.north) (gt6-i0) {};
+		\node[xshift=5, yshift=-3] at (gt6.north) (gt6-i1) {};
+
+		\draw (0,-4.5) node[square,draw, minimum size=2cm, scale=0.6] (conc1) {\huge$C$};
+		\node[xshift=-5, yshift=-3] at (conc1.north) (conc1-i0) {};
+		\node[xshift=5, yshift=-3] at (conc1.north) (conc1-i1) {};
+
+		\draw (3,-6) node[square,draw, minimum size=2cm, scale=0.6] (conc2) {\huge$C$};
+		\node[xshift=-5, yshift=-3] at (conc2.north) (conc2-i0) {};
+		\node[xshift=5, yshift=-3] at (conc2.north) (conc2-i1) {};
+		% ------------------
+
+		% vantaggio
+		\draw (0,0) node[above] (inizia) {\scriptsize vantaggio} -- ++(0,-1.5);
+		\draw[-latex] (0,-1.5) -- ++(-0.5,0) -| (gt1-i1);
+		\draw[latex-] (gt1-i0) -- ++(0,0.5) node[above] {\tiny 0000};
+
+		\draw[-latex] (0,-1.5) -- ++(0.5,0) -| (gt2-i0);
+		\draw[latex-] (gt2-i1) -- ++(0,0.5) node[above] {\tiny 0000};
+		\draw[fill] (0,-1.5) circle (0.03);
+
+		\draw[-latex] (gt1.south) -- ++(0,-0.5) -| (conc1-i0);
+		\draw[-latex] (gt2.south) -- ++(0,-0.5) -| (conc1-i1);
+
+		\draw[latex-] (gt3-i0) -- ++(0,0.5) node[above] {\tiny $\stackrel{-2}{1110}$};
+		\draw[latex-] (gt4-i1) -- ++(0,0.5) node[above] {\tiny $\stackrel{2}{0010}$};
+		\draw[latex-] (gt3-i1) -- ++(0,0.5) -- ++(0.5,0);
+		\draw[latex-] (gt4-i0) -- ++(0,0.5) -- ++(-0.5,0);
+		\draw[fill] (2.8,-1.68) circle (0.03);
+		\draw (2.8,-1.68) |- (0,-0.5);
+		\draw[fill] (0,-0.5) circle (0.03);
+
+		\node[and port, scale=0.6, rotate=-90, anchor=in 2] at (gt3.south |- 52,-4) (and1) {};
+		\node[and port, scale=0.6, rotate=-90, anchor=in 2] at (gt4.south |- 52,-4) (and2) {};
+
+		\draw (gt3.south) -- (and1.in 2);
+		\draw (gt4.south) -- (and2.in 2);
+
+		\draw[-latex] (and1.out) -- ++(0,-0.3) -| (conc2-i0);
+		\draw[-latex] (and2.out) -- ++(0,-0.3) -| (conc2-i1);
+
+		% mancheIdx and maxManche
+		\draw[latex-] (gt5-i1) -- ++(0,0.5) node[above, xshift=2] {\tiny $\stackrel{4}{00100}$};
+		\draw[latex-] (gt5-i0) -- (gt5-i0 |- 52, 0) node[above] {\scriptsize mancheIdx};
+
+		\draw[latex-] (gt6-i1) -- (gt6-i1 |- 52, 0) node[above] {\scriptsize maxManche};
+		\draw[latex-] (gt6-i0) -- ++(0,0.5) |- (gt5-i0 |- 52, -1);
+		\draw[fill] (gt5-i0 |- 52, -1) circle (0.03);
+
+		\draw (gt5.south) -- ++(0,-0.5) -- ++(-2,0) -| (and1.in 1);
+		\draw (and2.in 1) -- ++(0,0.57);
+		\draw[fill] (3.838,-3.43) circle (0.03);
+
+		\draw[-latex] (conc2.south) -| (1mux2-i0);
+		\draw[-latex] (conc1.south) -- ++(0,-2) -| (1mux2-i1);
+
+		\draw[-latex] (1mux2-o) -- (2mux2-i0);
+		\draw[latex-] (2mux2-i1) -- ++(0,0.5) node[above] {\tiny 00};
+
+		\draw[-latex] (gt6.south) |- (1mux2-s);
+
+		% inizia
+		\draw[-latex] (7.8,0) node[above] (inizia) {\scriptsize inizia} |- (2mux2-s);
+
+		\draw[-latex] (2mux2-o) -- ++(0,-1) node[below] {\scriptsize partita};
+
+		% Numero di bit
+		% vantaggio 
+		\draw (-0.1, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 4};
+		% mancheIdx
+		\draw (4.63, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+		% maxManche
+		\draw (6.38, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 5};
+		% inizia
+		\draw (7.7, -0.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+
+		% gt
+		\draw (-0.8, -3.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+		\draw (0.6, -3.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+		\draw (2, -3.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+		\draw (3.4, -3.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+		\draw (4.8, -3.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+		\draw (6.2, -3.3) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+
+		% and
+		\draw (2.18, -5.1) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+		\draw (3.58, -5.1) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 1};
+
+		% conc
+		\draw (-0.1, -5.25) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 2};
+		\draw (2.9, -6.75) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 2};
+
+		% mux
+		\draw (2.65, -8.7) -- ++(0.2, 0.2) node[left, yshift=-2, xshift=-5] {\tiny 2};
+		\draw (2.9, -10.2) -- ++(0.2, 0.2) node[right, yshift=-2] {\tiny 2};
+
+		% ------------------
+	\end{circuitikz}
+	\caption{Architettura del componente Partita}
+\end{figure}
 
 \section{Simulazioni}
 
