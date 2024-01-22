@@ -117,10 +117,8 @@ Il circuito ha \textbf{due uscite}:
 	      \end{itemize}
 \end{itemize}
 \section{Architettura generale}
-Il circuito è costituito da FSM (Controllore) e Datapath (elaboratore). I due file che racchiudono la rappresentazione di tali componenti sono presenti nella cartella \emph{sis}.
-I due componenti sono collegati tra di loro in un unico circuito sequenziale chiamato \emph{FSMD.blif}.
-
-\noindent Nella figura \ref{fig:architettura_generale} è rappresentata l'architettura generale del circuito
+Il circuito è costituito da FSM (Controllore) e Datapath (elaboratore). 
+Nella figura \ref{fig:architettura_generale} è rappresentata l'architettura generale del circuito
 che prende in input i segnali \textbf{primo}, \textbf{secondo} e \textbf{inizia} condivisi tra FSM e Datapath e
 restituisce in output i segnali \textbf{manche} (dalla FSM) e \textbf{partita} (dal Datapath). Il segnale di
 clock è lo stesso per entrambi i componenti.
@@ -796,7 +794,6 @@ e fornisce in output:
 \end{figure}
 
 \section{Simulazioni}
-
 Gli ingressi sono: \textbf{primo[1], primo[0], secondo[1], secondo[0], inizia}.\\
 Le uscite sono: \textbf{manche[1], manche[0], partita[1], partita[0]}.
 
@@ -805,6 +802,116 @@ ognuna con un diverso numero di \textbf{Manche massime} e di svolgimento delle m
 simulazione è stata generata dal testbench in verilog in modo da verificare che gli output fossero identici
 tra il modello in verilog e quello in sis.
 
+\vspace{1em}
+\noindent Le partite sono svolte nel seguente modo:
+\begin{enumerate}
+	\item Partita da 6 manche finita in pareggio;
+	\item Partita da 5 manche vinta dal giocatore 2 con vantaggio \( -1 \);
+	\item Partita da 19 manche vinta dal giocatore 1 con vantaggio \( +2 \);
+	\item Partita da 9 manche vinta dal giocatore 1 con vantaggio \( +2 \);
+\end{enumerate}
+\begin{figure}[H]
+  \centering
+
+	\begin{minipage}{\linewidth}
+  \centering
+		\begin{minipage}{0.45\linewidth}
+  \centering
+        \begin{tabular}{|c|c|c|c|}
+          \hline
+          \multicolumn{4}{|c|}{Partita \textbf{1}} \\
+          \multicolumn{4}{|c|}{\footnotesize Manche massime: \textbf{6}} \\
+          \hline
+          \footnotesize \textbf{\#} & \footnotesize \textbf{Primo} & \footnotesize \textbf{Secondo} & \footnotesize \textbf{Van.} \\
+          \hline
+          1 & Sasso & Carta & \( -1 \)  \\
+          (1) & Forbici & Carta & \( -1 \)  \\
+          2 & Sasso & Forbici & \( 0 \)  \\
+          3 & Forbici & Forbici & \( 0 \)  \\
+          4 & Forbici & Carta & \( 1 \)  \\
+          5 & Sasso & Carta & \( 0 \)  \\
+          6 & Forbici & Forbici & \( 0 \)  \\
+          \hline
+          \multicolumn{4}{|c|}{\footnotesize \textbf{Pareggio}} \\
+          \hline
+        \end{tabular}
+		\end{minipage}
+		\hspace{0.05\linewidth}
+		\begin{minipage}{0.45\linewidth}
+  \centering
+        \begin{tabular}{|c|c|c|c|}
+          \hline
+          \multicolumn{4}{|c|}{Partita \textbf{2}} \\
+          \multicolumn{4}{|c|}{\footnotesize Manche massime: \textbf{5}} \\
+          \hline
+          \footnotesize \textbf{\#} & \footnotesize \textbf{Primo} & \footnotesize \textbf{Secondo} & \footnotesize \textbf{Van.} \\
+          \hline
+          1 & Sasso & Forbici & \( 1 \)  \\
+          2 & Carta & Sasso & \( 2 \)  \\
+          3 & Sasso & Carta & \( 1 \)  \\
+          4 & Carta & Forbici & \( 0 \)  \\
+          5 & Forbici & Sasso & \( -1 \)  \\
+          \hline
+          \multicolumn{4}{|c|}{\footnotesize Vittoria: \textbf{Secondo}} \\
+          \hline
+        \end{tabular}
+		\end{minipage}
+	\end{minipage}
+
+  \vspace{0.5cm}
+
+	\begin{minipage}{\linewidth}
+  \centering
+		\begin{minipage}{0.45\linewidth}
+  \centering
+        \begin{tabular}{|c|c|c|c|}
+          \hline
+          \multicolumn{4}{|c|}{Partita \textbf{3}} \\
+          \multicolumn{4}{|c|}{\footnotesize Manche massime: \textbf{19}} \\
+          \hline
+          \footnotesize \textbf{\#} & \footnotesize \textbf{Primo} & \footnotesize \textbf{Secondo} & \footnotesize \textbf{Van.} \\
+          \hline
+          1 & Sasso & Forbici & \( 1 \)  \\
+          2 & Carta & Sasso & \( 2 \)  \\
+          3 & Forbici & Carta & \( 3 \)  \\
+          (3) & Forbici & Sasso & \( 3 \)  \\
+          4 & Sasso & Carta & \( 2 \)  \\
+          \hline
+          \multicolumn{4}{|c|}{\footnotesize Vittoria: \textbf{Primo}} \\
+          \hline
+        \end{tabular}
+		\end{minipage}
+		\hspace{0.05\linewidth}
+		\begin{minipage}{0.45\linewidth}
+  \centering
+        \begin{tabular}{|c|c|c|c|}
+          \hline
+          \multicolumn{4}{|c|}{Partita \textbf{4}} \\
+          \multicolumn{4}{|c|}{\footnotesize Manche massime: \textbf{9}} \\
+          \hline
+          \footnotesize \textbf{\#} & \footnotesize \textbf{Primo} & \footnotesize \textbf{Secondo} & \footnotesize \textbf{Van.} \\
+          \hline
+          1 & Sasso & Forbici & \( 1 \)  \\
+          2 & Carta & Sasso & \( 2 \)  \\
+          3 & Forbici & Sasso & \( 1 \)  \\
+          4 & Carta & Carta & \( 1 \)  \\
+          5 & Forbici & Sasso & \( 0 \)  \\
+          6 & Sasso & Forbici & \( 1 \)  \\
+          (6) & Sasso & Carta & \( 1 \)  \\
+          (6) & Null & Forbici & \( 1 \)  \\
+          (6) & Sasso & Forbici & \( 1 \)  \\
+          7 & Forbici & Forbici & \( 1 \)  \\
+          8 & Carta & Sasso & \( 2 \)  \\
+          \hline
+          \multicolumn{4}{|c|}{\footnotesize Vittoria: \textbf{Primo}} \\
+          \hline
+        \end{tabular}
+		\end{minipage}
+	\end{minipage}
+\end{figure}
+
+\subsection{SIS}
+Di seguito sono riportati i file di input e di output di sis per la simulazione.
 \begin{figure}[H]
 	\centering
 	\begin{minipage}{\linewidth}
@@ -892,16 +999,144 @@ tra il modello in verilog e quello in sis.
 		\end{minipage}
 	\end{minipage}
 \end{figure}
-\noindent Sono state simulate 4 partite con le seguenti caratteristiche:
-\begin{enumerate}
-	\item Partita da 6 manche finita in pareggio;
-	\item Partita da 5 manche vinta dal giocatore 2 con vantaggio \( -1 \);
-	\item Partita da 19 manche vinta dal giocatore 1 con vantaggio \( +2 \);
-	\item Partita da 9 manche vinta dal giocatore 1 con vantaggio \( +2 \);
-\end{enumerate}
+
+\subsection{Verilog}
+Nel testbench in verilog sono stati inseriti dei display che mostrano i valori delle variabili in ogni ciclo di clock.
+Di seguito è riportato l'output dei display nel testbench in verilog:
+\begin{lstlisting}
+  # run -all
+  # Partita 1
+  # Primo: 00 Secondo: 10 Manche: 00 Partita: 00
+  # Primo: 01 Secondo: 10 Manche: 10 Partita: 00
+  # Primo: 11 Secondo: 10 Manche: 00 Partita: 00
+  # Primo: 01 Secondo: 11 Manche: 01 Partita: 00
+  # Primo: 11 Secondo: 11 Manche: 11 Partita: 00
+  # Primo: 11 Secondo: 10 Manche: 01 Partita: 00
+  # Primo: 01 Secondo: 10 Manche: 10 Partita: 00
+  # Primo: 11 Secondo: 11 Manche: 11 Partita: 11
+  # 
+  # Partita 2
+  # Primo: 00 Secondo: 01 Manche: 00 Partita: 00
+  # Primo: 01 Secondo: 11 Manche: 01 Partita: 00
+  # Primo: 10 Secondo: 01 Manche: 01 Partita: 00
+  # Primo: 01 Secondo: 10 Manche: 10 Partita: 00
+  # Primo: 10 Secondo: 11 Manche: 10 Partita: 00
+  # Primo: 11 Secondo: 01 Manche: 10 Partita: 10
+  # 
+  # Partita 3
+  # Primo: 11 Secondo: 11 Manche: 00 Partita: 00
+  # Primo: 01 Secondo: 11 Manche: 01 Partita: 00
+  # Primo: 10 Secondo: 01 Manche: 01 Partita: 00
+  # Primo: 11 Secondo: 10 Manche: 01 Partita: 00
+  # Primo: 11 Secondo: 01 Manche: 00 Partita: 00
+  # Primo: 01 Secondo: 10 Manche: 10 Partita: 01
+  # 
+  # Partita 4
+  # Primo: 01 Secondo: 01 Manche: 00 Partita: 00
+  # Primo: 01 Secondo: 11 Manche: 01 Partita: 00
+  # Primo: 10 Secondo: 01 Manche: 01 Partita: 00
+  # Primo: 11 Secondo: 01 Manche: 10 Partita: 00
+  # Primo: 10 Secondo: 10 Manche: 11 Partita: 00
+  # Primo: 11 Secondo: 01 Manche: 10 Partita: 00
+  # Primo: 01 Secondo: 11 Manche: 01 Partita: 00
+  # Primo: 01 Secondo: 10 Manche: 00 Partita: 00
+  # Primo: 00 Secondo: 11 Manche: 00 Partita: 00
+  # Primo: 01 Secondo: 11 Manche: 00 Partita: 00
+  # Primo: 11 Secondo: 11 Manche: 11 Partita: 00
+  # Primo: 10 Secondo: 01 Manche: 01 Partita: 01
+  # ** Note: $finish    : testbench.sv(381)
+\end{lstlisting}
+
+\subsection{Confronto}
+Di seguito è riportato il confronto tra i due output. Si nota che sono identici perchè il modello in sis 
+è stato progettato in modo da rispettare il modello in Verilog.
+
+\begin{figure}[H]
+	\centering
+	\begin{minipage}{\linewidth}
+		\centering
+		\begin{minipage}{0.45\linewidth}
+			\textbf{output\_sis.txt}:
+			\begin{lstlisting}[language=bash]
+
+        Outputs: 0 0 0 0
+        Outputs: 1 0 0 0
+        Outputs: 0 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 1 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 1 0 0 0
+        Outputs: 1 1 1 1
+        Outputs: 0 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 1 0 0 0
+        Outputs: 1 0 0 0
+        Outputs: 1 0 1 0
+        Outputs: 0 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 0 0 0
+        Outputs: 1 0 0 1
+        Outputs: 0 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 1 0 0 0
+        Outputs: 1 1 0 0
+        Outputs: 1 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 0 0 0
+        Outputs: 0 0 0 0
+        Outputs: 0 0 0 0
+        Outputs: 1 1 0 0
+        Outputs: 0 1 0 1
+      \end{lstlisting}
+		\end{minipage}
+		\hspace{0.05\linewidth}
+		\begin{minipage}{0.45\linewidth}
+			\textbf{output\_verilog.txt}:
+			\begin{lstlisting}[language=sh]
+
+        Outputs: 0 0 0 0
+        Outputs: 1 0 0 0
+        Outputs: 0 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 1 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 1 0 0 0
+        Outputs: 1 1 1 1
+        Outputs: 0 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 1 0 0 0
+        Outputs: 1 0 0 0
+        Outputs: 1 0 1 0
+        Outputs: 0 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 0 0 0
+        Outputs: 1 0 0 1
+        Outputs: 0 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 1 0 0
+        Outputs: 1 0 0 0
+        Outputs: 1 1 0 0
+        Outputs: 1 0 0 0
+        Outputs: 0 1 0 0
+        Outputs: 0 0 0 0
+        Outputs: 0 0 0 0
+        Outputs: 0 0 0 0
+        Outputs: 1 1 0 0
+        Outputs: 0 1 0 1
+      \end{lstlisting}
+		\end{minipage}
+	\end{minipage}
+\end{figure}
+
 
 \section{Statistiche del circuito}
-Di seguito sono riportate le statistiche del circuito implementato in sis.
 
 \subsection{Prima della minimizzazione}
 Le statistiche della FSM prima della minimizzazione sono le seguenti:
@@ -996,15 +1231,7 @@ Le statistiche di numero di gate e ritardo della FSMD prima della minimizzazione
 \vspace{1em}
 \begin{lstlisting}
   sis> read_library synch.genlib
-  sis> map -s
-  warning: unknown latch type at node '{[12]}' (RISING_EDGE assumed)
-  warning: unknown latch type at node '{[13]}' (RISING_EDGE assumed)
-  warning: unknown latch type at node '{[14]}' (RISING_EDGE assumed)
-  WARNING: uses as primary input drive the value (0.20,0.20)
-  WARNING: uses as primary input arrival the value (0.00,0.00)
-  WARNING: uses as primary input max load limit the value (999.00)
-  WARNING: uses as primary output required the value (0.00,0.00)
-  WARNING: uses as primary output load the value 1.00
+  sis> map -m 0 -s -W
   >>> before removing serial inverters <<<
   # of outputs:          21
   total gate area:       7268.00
@@ -1029,44 +1256,46 @@ Le statistiche di numero di gate e ritardo della FSMD prima della minimizzazione
   total neg slack:      (-457.40,-457.40)
   # of failing outputs:  21
 \end{lstlisting}
+\noindent Le statistiche di numero di gate e ritardo del Datapath prima della minimizzazione sono le seguenti:
+\begin{itemize}
+  \item \textbf{Total gate area}: \( 7044 \) ;
+  \item \textbf{Maximum arrival time (cammino critico)}: \( 39.80 \) ;
+\end{itemize}
 
 \subsection{Dopo la minimizzazione per area}
 Le statistiche di numero di gate e ritardo della FSMD dopo la minimizzazione per area sono le seguenti:
 \begin{lstlisting}
   sis> read_library synch.genlib
-  sis> map -s
-  warning: unknown latch type at node '{[3521]}' (RISING_EDGE assumed)
-  warning: unknown latch type at node '{[3522]}' (RISING_EDGE assumed)
-  warning: unknown latch type at node '{[3523]}' (RISING_EDGE assumed)
-  WARNING: uses as primary input drive the value (0.20,0.20)
-  WARNING: uses as primary input arrival the value (0.00,0.00)
-  WARNING: uses as primary input max load limit the value (999.00)
-  WARNING: uses as primary output required the value (0.00,0.00)
-  WARNING: uses as primary output load the value 1.00
+  sis> map -m 0 -s -W
   >>> before removing serial inverters <<<
   # of outputs:          21
-  total gate area:       5828.00
-  maximum arrival time: (48.60,48.60)
+  total gate area:       5564.00
+  maximum arrival time: (46.20,46.20)
   maximum po slack:     (-3.20,-3.20)
-  minimum po slack:     (-48.60,-48.60)
-  total neg slack:      (-563.20,-563.20)
+  minimum po slack:     (-46.20,-46.20)
+  total neg slack:      (-534.60,-534.60)
   # of failing outputs:  21
   >>> before removing parallel inverters <<<
   # of outputs:          21
-  total gate area:       5796.00
-  maximum arrival time: (48.60,48.60)
+  total gate area:       5500.00
+  maximum arrival time: (46.20,46.20)
   maximum po slack:     (-3.20,-3.20)
-  minimum po slack:     (-48.60,-48.60)
-  total neg slack:      (-563.20,-563.20)
+  minimum po slack:     (-46.20,-46.20)
+  total neg slack:      (-534.60,-534.60)
   # of failing outputs:  21
   # of outputs:          21
-  total gate area:       5396.00
-  maximum arrival time: (45.80,45.80)
+  total gate area:       5244.00
+  maximum arrival time: (44.40,44.40)
   maximum po slack:     (-3.20,-3.20)
-  minimum po slack:     (-45.80,-45.80)
-  total neg slack:      (-527.00,-527.00)
+  minimum po slack:     (-44.40,-44.40)
+  total neg slack:      (-508.60,-508.60)
   # of failing outputs:  21
 \end{lstlisting}
+\noindent Le statistiche di numero di gate e ritardo del Datapath prima della minimizzazione sono le seguenti:
+\begin{itemize}
+  \item \textbf{Total gate area}: \( 5244 \) ;
+  \item \textbf{Maximum arrival time (cammino critico)}: \( 44.40 \) ;
+\end{itemize}
 
 \section{Scelte progettuali}
 \subsection{FSM}
