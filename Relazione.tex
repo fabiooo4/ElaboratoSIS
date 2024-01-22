@@ -71,7 +71,8 @@
 \section{Specifiche}
 Si progetti un dispositivo per la gestione di partite di \textbf{Morra Cinese}, conosciuta anche come "sasso-carta-forbici".
 Il dispositivo dovrà essere modellato come un circuito sequenziale FSMD (Finite State Machine + Datapath) in Sis e Verilog.
-Si considerino due giocatori che inseriscono una mossa che può essere sasso, carta o forbici. Ad ogni manche, il giocatore vincente è decretato dalle seguenti regole:
+Si considerino due giocatori che inseriscono una mossa che può essere sasso, carta o forbici.
+Ogni partita è composta da più manche e ad ogni manche il giocatore vincente è decretato dalle seguenti regole:
 \begin{itemize}
 	\item Sasso batte Forbici
 	\item Forbici batte Carta
@@ -112,12 +113,12 @@ Il circuito ha \textbf{due uscite}:
 	      \begin{itemize}
 		      \item \textbf{00}: la partita non è ancora terminata;
 		      \item \textbf{01}: la partita è terminata, vittoria del \textbf{giocatore 1};
-		      \item \textbf{10}: la partita è terminata, vittoria del giocatore 2;
+          \item \textbf{10}: la partita è terminata, vittoria del \textbf{giocatore 2};
 		      \item \textbf{11}: la partita è terminata in pareggio;
 	      \end{itemize}
 \end{itemize}
 \section{Architettura generale}
-Il circuito è costituito da FSM (Controllore) e Datapath (elaboratore). 
+Il circuito è costituito da FSM (controllore) e Datapath (elaboratore). 
 Nella figura \ref{fig:architettura_generale} è rappresentata l'architettura generale del circuito
 che prende in input i segnali \textbf{primo}, \textbf{secondo} e \textbf{inizia} condivisi tra FSM e Datapath e
 restituisce in output i segnali \textbf{manche} (dalla FSM) e \textbf{partita} (dal Datapath). Il segnale di
@@ -328,13 +329,13 @@ I componenti che sono stati utilizzati per l'elaborazione del circuito sono i se
 	      \end{itemize}
 	\item \textbf{Registro a 4 bit}: 1
 
-	      \noindent Utilizzato per salvare in memoria il valore di \textbf{vangaggio}. Il vantaggio è codificato in complemento
+	      \noindent Utilizzato per salvare in memoria il valore di \textbf{vantaggio}. Il vantaggio è codificato in complemento
 	      a 2 in modo da poter calcolare il vantaggio di entrambi i giocatori con un singolo registro. Quando il
 	      vantaggio assume valori positivi è il giocatore 1 ad avere il vantaggio, quando assume valori negativi
 	      è il giocatore 2 ad avercelo.
 	\item \textbf{Mux a 4 Ingressi da 5 bit}: 1
 
-	      \noindent Utilizzato per incrementare il \textbf{mancheIdx} durante la partita solo nel caso la manche
+	      \noindent Utilizzato per incrementare il \textbf{mancheIdx} durante la partita solo nel caso in cui la manche
 	      risulti valida. Il Mux dà in output \( 00001 \) se la manche è valida, \( 00000 \) altrimenti.
 	\item \textbf{Mux a 4 Ingressi da 4 bit}: 1
 
@@ -349,9 +350,9 @@ I componenti che sono stati utilizzati per l'elaborazione del circuito sono i se
 	      è uguale a \( 1 \), altrimenti inserisce il nuovo valore di \textbf{mancheIdx} e \textbf{maxManche} in input.
 	\item \textbf{Mux a 2 Ingressi da 4 bit}: 1
 
-	      \noindent Utilizzato per decidere quale valore inserire all'interno del registro di \textbf{vangaggio}.
+	      \noindent Utilizzato per decidere quale valore inserire all'interno del registro di \textbf{vantaggio}.
 	      Il Mux inizializza il registro con il valore \( 0000 \) se il valore di \textbf{inizia} è uguale a \( 1 \),
-	      altrimenti inserisce il nuovo valore di \textbf{vangaggio} in input.
+	      altrimenti inserisce il nuovo valore di \textbf{vantaggio} in input.
 	\item \textbf{Mux a 2 Ingressi da 2 bit}: 2
 
 	      \noindent Utilizzati nel componente \textbf{Partita}. I due Mux insieme determinano quale valore di
@@ -363,22 +364,22 @@ I componenti che sono stati utilizzati per l'elaborazione del circuito sono i se
 	\item \textbf{Sommatore a 4 bit}: 1
 
 	      \noindent Utilizzato per sommare 2 numeri e fornire in output un numero a 4 bit.
-	      La sua funzione è modificare il valore di \textbf{vangaggio}.
+	      La sua funzione è modificare il valore di \textbf{vantaggio}.
 	\item \textbf{And}: 2
 
-	      \noindent Utilizzati per verificare se due condizioni sono vere allo stesso tempo. Si trovano nel componente \textbf{partita} del Datapath.
+	      \noindent Utilizzati per verificare se due condizioni sono vere allo stesso tempo. Si trovano nel componente \textbf{Partita} del Datapath.
 	\item \textbf{Maggiore uguale da 5 bit}: 2
 
 	      \noindent Utilizzati rispettivamente per confrontare il valore di \textbf{mancheIdx} e \textbf{maxManche},
 	      e per controllare se il valore di \textbf{mancheIdx} è maggiore o uguale a \( 4 \).
 	\item \textbf{Maggiore uguale da 4 bit}: 4
 
-	      \noindent Utilizzati per comparare il valore di \textbf{vangaggio} con alcune \textbf{Costanti}. Questo
-	      componente è stato progettato per tenere in considerazione la codifica in complemento a 2 di \textbf{vangaggio}.
+	      \noindent Utilizzati per comparare il valore di \textbf{vantaggio} con alcune \textbf{Costanti}. Questo
+	      componente è stato progettato per tenere in considerazione la codifica in complemento a 2 di \textbf{vantaggio}.
 	\item \textbf{Concatenatore a 2 ingressi da 2 bit con uscita a 5 bit}: 1
 
 	      \noindent Utilizzato per concatenare il valore di \textbf{primo} e \textbf{secondo} in modo da poter
-	      avere un unico valore a 5 bit per poter calcolare \textbf{maxManche}.
+	      avere un unico valore a 5 bit (aggiungendo uno 0 come bit più significativo) per poter calcolare \textbf{maxManche}.
 	\item \textbf{Concatenatore a 2 ingressi da 1 bit con uscita a 2 bit}: 2
 
 	      \noindent Utilizzati per concatenare i valori di controllo per determinare il vincitore della partita.
@@ -797,18 +798,18 @@ e fornisce in output:
 Gli ingressi sono: \textbf{primo[1], primo[0], secondo[1], secondo[0], inizia}.\\
 Le uscite sono: \textbf{manche[1], manche[0], partita[1], partita[0]}.
 
-\noindent Abbiamo svolto una singola simulazione prendendo in considerazione \textbf{Quattro Partite},
-ognuna con un diverso numero di \textbf{Manche massime} e di svolgimento delle manche stesse. Questa
+\noindent Abbiamo svolto una singola simulazione prendendo in considerazione \textbf{quattro partite},
+ognuna con un diverso numero di \textbf{manche massime}. Questa
 simulazione è stata generata dal testbench in verilog in modo da verificare che gli output fossero identici
 tra il modello in verilog e quello in sis.
 
 \vspace{1em}
 \noindent Le partite sono svolte nel seguente modo:
 \begin{enumerate}
-	\item Partita da 6 manche finita in pareggio;
-	\item Partita da 5 manche vinta dal giocatore 2 con vantaggio \( -1 \);
-	\item Partita da 19 manche vinta dal giocatore 1 con vantaggio \( +2 \);
-	\item Partita da 9 manche vinta dal giocatore 1 con vantaggio \( +2 \);
+	\item Partita da 6 manche massime finita in pareggio;
+	\item Partita da 5 manche massime vinta dal giocatore 2 con vantaggio \( -1 \);
+	\item Partita da 19 manche massime vinta dal giocatore 1 con vantaggio \( +2 \);
+	\item Partita da 9 manche massime vinta dal giocatore 1 con vantaggio \( +2 \);
 \end{enumerate}
 \begin{figure}[H]
   \centering
@@ -1001,7 +1002,7 @@ Di seguito sono riportati i file di input e di output di sis per la simulazione.
 \end{figure}
 
 \subsection{Verilog}
-Nel testbench in verilog sono stati inseriti dei display che mostrano i valori delle variabili in ogni ciclo di clock.
+Nel testbench in verilog sono stati inseriti dei \$display() che mostrano i valori delle variabili in ogni ciclo di clock.
 Di seguito è riportato l'output dei display nel testbench in verilog:
 \begin{lstlisting}
   # run -all
@@ -1220,7 +1221,7 @@ seguenti operazioni:
   MorraCinese     pi= 5   po= 4   nodes= 44       latches=17
   lits(sop)= 285
 \end{lstlisting}
-\noindent Non abbiamo eseguito lo script \emph{script.rugged} in quanto avremmo ottenuto un letterale e un nodo
+\noindent Non abbiamo eseguito anche lo script \emph{script.rugged} in quanto avremmo ottenuto un letterale e un nodo
 in più rispetto alla sola \emph{full\_simplify}.
 
 \section{Numero di gate e ritardo}
@@ -1291,7 +1292,7 @@ Le statistiche di numero di gate e ritardo della FSMD dopo la minimizzazione per
   total neg slack:      (-508.60,-508.60)
   # of failing outputs:  21
 \end{lstlisting}
-\noindent Le statistiche di numero di gate e ritardo del Datapath prima della minimizzazione sono le seguenti:
+\noindent Le statistiche di numero di gate e ritardo del Datapath dopo la minimizzazione per area sono le seguenti:
 \begin{itemize}
   \item \textbf{Total gate area}: \( 5244 \) ;
   \item \textbf{Maximum arrival time (cammino critico)}: \( 44.40 \) ;
@@ -1300,18 +1301,20 @@ Le statistiche di numero di gate e ritardo della FSMD dopo la minimizzazione per
 \section{Scelte progettuali}
 \subsection{FSM}
 Nello sviluppo di questo circuito abbiamo pensato di implementare il calcolo della manche all'interno della
-FSM in modo da avere un circuito più semplice e con meno componenti, risparmiandoci così di memorizzare il
-vincitore della manche precedente e la mossa che ha usato per vincere.
+FSM in modo da avere un circuito più semplice e con meno componenti, risparmiandoci così di memorizzare
+all'interno del Datapath il vincitore di ogni manche e la mossa che ha usato per vincere.
 
 \subsection{Datapath}
 \subsubsection{Concatenatori}
 I componenti dei concatenatori sono stati inseriti nel datapath a scopo puramente illustrativo, in quanto
 non sono stati utilizzati per la realizzazione del circuito siccome in sis è possibile gestire i bit singolarmente
-e quindi inserirli direttamente nei componenti che li utilizzano nell'ordine desiderato. In verilog, invece,
+e quindi inserirli direttamente nei componenti che li utilizzano nell'ordine desiderato.
+
+\noindent In verilog, invece,
 è possibile utilizzare l'operatore di concatenazione.
 
 \subsubsection{Componenti riutilizzati}
-Per la realizzazione del datapath abbiamo cercato di riutilizzare i componenti già realizzati per il circuito
+Per la realizzazione del datapath abbiamo cercato di riutilizzare il più possibile i componenti già realizzati per il circuito
 evitando di crearne di nuovi, ad esempio abbiamo utilizzato solo il componente \textbf{Maggiore Uguale} per 
 tutti i controlli necessari all'interno del componente \textbf{Partita}.
 
@@ -1321,6 +1324,7 @@ sono diversi. Avremmo potuto considerare \textbf{vantaggio} da 5 bit per poter r
 ma abbiamo preferito ottimizzare il circuito scegliendo il minor numero di bit necessari per ogni componente.
 
 \subsection{Warning}
-Simulando il circuito in sis vengono generati dei warning riguardanti a uscite che non vengono utilizzate, come
-ad esempio i riporti dei sommatori. Questi warning possono essere ignorati in quanto non influiscono sul funzionamento.
+Simulando il circuito in sis vengono generati dei warning riguardanti le uscite che non vengono utilizzate, come
+ad esempio i riporti dei sommatori. Questi warning possono essere ignorati in quanto non influiscono sul funzionamento
+del circuito.
 \end{document}
